@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>gwtFacade</servlet-name>
+    <servlet-class>nsp.server.GWTFacade</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>gwtFacade</servlet-name>
+    <url-pattern>/napkinsketchparser/gwtFacade</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>uploadFile</servlet-name>
+    <servlet-class>nsp.server.FileHandler</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>uploadFile</servlet-name>
+    <url-pattern>/napkinsketchparser/uploadFile</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>NapkinSketchParser.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>
