@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.1//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.1/distro-source/core/src/gwt-module.dtd">
 <module rename-to='napkinsketchparser'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
@@ -15,4 +14,8 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='nsp.client.NapkinSketchParser'/>
+  
+  
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
 </module>

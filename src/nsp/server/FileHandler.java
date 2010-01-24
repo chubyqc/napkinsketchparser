@@ -27,8 +27,10 @@ public class FileHandler extends HttpServlet {
 		try {
 			for (Object obj : upload.parseRequest(req)) {
 				FileItem fileItem = (FileItem)obj;
-				SessionManager.getInstance().getFacade(req.getSession()).addImage(fileItem.getInputStream());
-				break;
+				if (!fileItem.isFormField()) {
+					SessionManager.getInstance().getFacade(req.getSession()).addImage(fileItem.getInputStream());
+					break;
+				}
 			}
 		} catch (FileUploadException e) {
 			e.printStackTrace();

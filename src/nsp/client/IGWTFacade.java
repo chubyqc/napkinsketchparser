@@ -8,5 +8,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("gwtFacade")
 public interface IGWTFacade extends RemoteService {
-	String greetServer(String name) throws NSPException;
+	String getImagePath() throws NSPException;
 }

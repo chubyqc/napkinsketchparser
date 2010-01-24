@@ -1,11 +1,10 @@
 package nsp.client;
 
+import nsp.client.widgets.ImageContainer;
+import nsp.client.widgets.UploadForm;
+
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -13,25 +12,25 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class NapkinSketchParser implements EntryPoint {
 	
+	private ImageContainer _image;
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final FormPanel form = new FormPanel();
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
-		form.setAction("/napkinsketchparser/uploadFile");
-
-		FileUpload upload = new FileUpload();
-		upload.setName("upload");
-		form.add(upload);
-
-		RootPanel.get().add(form);
-		RootPanel.get().add(new Button("Submit", new ClickHandler() {
+		new UploadForm(this).appendTo(RootPanel.get());
+		_image = new ImageContainer();
+		_image.appendTo(RootPanel.get());
+	}
+	
+	public void fileUploaded() {
+		GWTFacade.get().getImagePath(new AsyncCallback<String>() {
 			@Override
-			public void onClick(ClickEvent event) {
-				form.submit();
+			public void onSuccess(String result) {
+				_image.updateUrl(result);
 			}
-		}));
+			@Override
+			public void onFailure(Throwable caught) {}
+		});
 	}
 }
