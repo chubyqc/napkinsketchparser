@@ -36,9 +36,14 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public void addImage(String url) {
+		addImage(0, 0, url);
+	}
+	
+	public void addImage(int x, int y, String url) {
 		ImageContainer image = new ImageContainer(url);
 		_images.add(image);
 		image.appendTo(_canvas);
+		_canvas.setWidgetPosition(image.getWidget(), x, y);
 	}
 	
 	void setSelectionBorder(SelectionBorder border) {
@@ -79,6 +84,8 @@ public class DrawingCanvas extends AbstractWidget {
 				event.preventDefault();
 				event.stopPropagation();
 				_handlerRegistration.removeHandler();
+				_border.cropImage(_canvas.getWidgetLeft(_border.getWidget()),
+						_canvas.getWidgetTop(_border.getWidget()));
 			}
 		});
 	}

@@ -7,4 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface IGWTFacadeAsync {
 	void getImagePath(AsyncCallback<String> callback);
+	
+	void cropImage(int left, int top, int right, int bottom,
+			AsyncCallback<String> callback);
 }

@@ -55,6 +55,11 @@ class ServerFacade implements IServerFacade {
 		return file.getAbsolutePath();
 	}
 	
+	@Override
+	public String cropImage(int left, int top, int right, int bottom) throws NoImageException {
+		return getImagePath();
+	}
+	
 	private File getImagePathFile() {
 		return new File(getImagesPath(), IMAGE_NAME);
 	}
