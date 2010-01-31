@@ -22,7 +22,7 @@ public class Move extends AbstractMode {
 			int newX = _initX + x;
 			int newY = _initY + y;
 			getCanvas().setBorderPosition(newX, newY);
-			getCanvas().setAttachedImagePosition(newX, newY);
+			getCanvas().setImagePosition(newX, newY);
 		}
 	}
 }

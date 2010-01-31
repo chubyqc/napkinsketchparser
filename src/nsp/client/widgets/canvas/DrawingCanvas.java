@@ -32,7 +32,7 @@ public class DrawingCanvas extends AbstractWidget {
 	private AbstractMode _moveMode;
 	private AbstractMode _selectMode;
 	
-	private ImageContainer _lastImage;
+	private ImageContainer _currentImage;
 	
 	public DrawingCanvas(int width, int height) {
 		_canvas = new AbsolutePanel();
@@ -67,7 +67,7 @@ public class DrawingCanvas extends AbstractWidget {
 		_images.add(image);
 		image.appendTo(_canvas);
 		_canvas.setWidgetPosition(image.getWidget(), x, y);
-		_lastImage = image;
+		setCurrentImage(image);
 	}
 	
 	private void setSelectionBorder(SelectionBorder border) {
@@ -108,8 +108,12 @@ public class DrawingCanvas extends AbstractWidget {
 		_canvas.setWidgetPosition(_border.getWidget(), x, y);
 	}
 	
-	public void setAttachedImagePosition(int x, int y) {
-		_canvas.setWidgetPosition(_lastImage.getWidget(), x, y);
+	private void setCurrentImage(ImageContainer image) {
+		_currentImage = image;
+	}
+	
+	public void setImagePosition(int x, int y) {
+		_canvas.setWidgetPosition(_currentImage.getWidget(), x, y);
 	}
 	
 	public int getBorderLeft() {
