@@ -1,8 +1,11 @@
 package nsp.client;
 
-import nsp.client.widgets.DrawingCanvas;
-import nsp.client.widgets.SelectionBorder;
 import nsp.client.widgets.UploadForm;
+import nsp.client.widgets.canvas.DrawingCanvas;
+import nsp.client.widgets.tools.CropTool;
+import nsp.client.widgets.tools.MoveTool;
+import nsp.client.widgets.tools.Toolbar;
+import nsp.client.widgets.tools.Upload;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,10 +22,19 @@ public class NapkinSketchParser implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		new UploadForm(this).appendTo(RootPanel.get());
 		_canvas = new DrawingCanvas(1000, 1000);
+		createToolbar();
 		_canvas.appendTo(RootPanel.get());
-		new SelectionBorder(_canvas);
+	}
+	
+	private void createToolbar() {
+		UploadForm form = new UploadForm(this);
+		form.appendTo(RootPanel.get());
+		Toolbar toolbar = new Toolbar(_canvas);
+		toolbar.appendTo(RootPanel.get());
+		toolbar.addTool(new Upload(form));
+		toolbar.addTool(new CropTool());
+		toolbar.addTool(new MoveTool());
 	}
 	
 	public void fileUploaded() {

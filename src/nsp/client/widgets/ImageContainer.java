@@ -21,7 +21,7 @@ public class ImageContainer extends AbstractWidget {
 	}
 
 	@Override
-	protected Widget getWidget() {
+	public Widget getWidget() {
 		return _image;
 	}
 

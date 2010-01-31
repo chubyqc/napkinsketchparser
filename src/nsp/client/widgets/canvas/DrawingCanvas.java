@@ -1,7 +1,13 @@
-package nsp.client.widgets;
+package nsp.client.widgets.canvas;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import nsp.client.widgets.AbstractWidget;
+import nsp.client.widgets.ImageContainer;
+import nsp.client.widgets.canvas.modes.AbstractMode;
+import nsp.client.widgets.canvas.modes.Move;
+import nsp.client.widgets.canvas.modes.Select;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -21,9 +27,12 @@ public class DrawingCanvas extends AbstractWidget {
 	private Set<ImageContainer> _images;
 	private SelectionBorder _border;
 	private HandlerRegistration _handlerRegistration;
+
+	private AbstractMode _currentMode;
+	private AbstractMode _moveMode;
+	private AbstractMode _selectMode;
 	
-	private int _initX;
-	private int _initY;
+	private ImageContainer _lastImage;
 	
 	public DrawingCanvas(int width, int height) {
 		_canvas = new AbsolutePanel();
@@ -31,8 +40,22 @@ public class DrawingCanvas extends AbstractWidget {
 		_images = new HashSet<ImageContainer>();
 		
 		_canvas.setPixelSize(width, height);
-		
+		setSelectionBorder(new SelectionBorder(this));
 		addMouseListeners();
+		
+		initModes();
+	}
+	
+	private void initModes() {
+		_moveMode = initMode(new Move());
+		_selectMode = initMode(new Select());
+		_currentMode = _selectMode;
+	}
+	
+	private AbstractMode initMode(AbstractMode mode) {
+		mode.setCanvas(this);
+		mode.setSelectionBorder(_border);
+		return mode;
 	}
 	
 	public void addImage(String url) {
@@ -44,16 +67,57 @@ public class DrawingCanvas extends AbstractWidget {
 		_images.add(image);
 		image.appendTo(_canvas);
 		_canvas.setWidgetPosition(image.getWidget(), x, y);
+		_lastImage = image;
 	}
 	
-	void setSelectionBorder(SelectionBorder border) {
+	private void setSelectionBorder(SelectionBorder border) {
 		_border = border;
 		_border.appendTo(_canvas);
 	}
 	
+	public void activateMove() {
+		_currentMode = _moveMode;
+	}
+	
+	public void deactivateMove() {
+		_currentMode = _selectMode;
+	}
+	
+	public int getSelectionLeft() {
+		return _canvas.getWidgetLeft(_border.getWidget());
+	}
+	
+	public int getSelectionTop() {
+		return _canvas.getWidgetTop(_border.getWidget());
+	}
+	
+	public int getSelectionRight() {
+		return getSelectionLeft() + _border.getWidget().getOffsetWidth();
+	}
+	
+	public int getSelectionBottom() {
+		return getSelectionTop() + _border.getWidget().getOffsetHeight();
+	}
+	
 	@Override
-	protected Widget getWidget() {
+	public Widget getWidget() {
 		return _focusPanel;
+	}
+	
+	public void setBorderPosition(int x, int y) {
+		_canvas.setWidgetPosition(_border.getWidget(), x, y);
+	}
+	
+	public void setAttachedImagePosition(int x, int y) {
+		_canvas.setWidgetPosition(_lastImage.getWidget(), x, y);
+	}
+	
+	public int getBorderLeft() {
+		return _canvas.getWidgetLeft(_border.getWidget());
+	}
+	
+	public int getBorderTop() {
+		return _canvas.getWidgetTop(_border.getWidget());
 	}
 	
 	private void addMouseListeners() {
@@ -62,8 +126,7 @@ public class DrawingCanvas extends AbstractWidget {
 			public void onMouseMove(MouseMoveEvent event) {
 				event.preventDefault();
 				event.stopPropagation();
-				_border.setSize(event.getX() - _initX,
-						event.getY() - _initY);
+				_currentMode.onMouseMove(event.getX(), event.getY());
 			}
 		};
 		_focusPanel.addMouseDownHandler(new MouseDownHandler() {
@@ -72,10 +135,7 @@ public class DrawingCanvas extends AbstractWidget {
 				event.preventDefault();
 				event.stopPropagation();
 				_handlerRegistration = _focusPanel.addMouseMoveHandler(moveHandler);
-				_initX = event.getX();
-				_initY = event.getY();
-				_border.setSize(0, 0);
-				_canvas.setWidgetPosition(_border.getWidget(), _initX, _initY);
+				_currentMode.onMouseDown(event.getX(), event.getY());
 			}
 		});
 		_focusPanel.addMouseUpHandler(new MouseUpHandler() {
@@ -84,8 +144,6 @@ public class DrawingCanvas extends AbstractWidget {
 				event.preventDefault();
 				event.stopPropagation();
 				_handlerRegistration.removeHandler();
-				_border.cropImage(_canvas.getWidgetLeft(_border.getWidget()),
-						_canvas.getWidgetTop(_border.getWidget()));
 			}
 		});
 	}
