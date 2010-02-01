@@ -1,13 +1,13 @@
 package nsp.client.widgets.canvas;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import nsp.client.geom.Point;
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
-import nsp.client.widgets.ImageContainer;
 import nsp.client.widgets.canvas.modes.AbstractMode;
 import nsp.client.widgets.canvas.modes.Move;
 import nsp.client.widgets.canvas.modes.Select;
+import nsp.client.widgets.layers.ImageContainer;
+import nsp.client.widgets.layers.ImagesManager;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -24,7 +24,6 @@ public class DrawingCanvas extends AbstractWidget {
 	
 	private FocusPanel _focusPanel;
 	private AbsolutePanel _canvas;
-	private Set<ImageContainer> _images;
 	private SelectionBorder _border;
 	private HandlerRegistration _handlerRegistration;
 
@@ -32,17 +31,16 @@ public class DrawingCanvas extends AbstractWidget {
 	private AbstractMode _moveMode;
 	private AbstractMode _selectMode;
 	
-	private ImageContainer _currentImage;
+	private ImagesManager _imagesManager;
 	
-	public DrawingCanvas(int width, int height) {
+	public DrawingCanvas(int width, int height,
+			ImagesManager imagesManager) {
 		_canvas = new AbsolutePanel();
 		_focusPanel = new FocusPanel(_canvas);
-		_images = new HashSet<ImageContainer>();
-		
+		_imagesManager = imagesManager;
 		_canvas.setPixelSize(width, height);
 		setSelectionBorder(new SelectionBorder(this));
 		addMouseListeners();
-		
 		initModes();
 	}
 	
@@ -63,11 +61,9 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public void addImage(int x, int y, String url) {
-		ImageContainer image = new ImageContainer(url);
-		_images.add(image);
+		ImageContainer image = _imagesManager.createImage(url);
 		image.appendTo(_canvas);
 		_canvas.setWidgetPosition(image.getWidget(), x, y);
-		setCurrentImage(image);
 	}
 	
 	private void setSelectionBorder(SelectionBorder border) {
@@ -83,20 +79,11 @@ public class DrawingCanvas extends AbstractWidget {
 		_currentMode = _selectMode;
 	}
 	
-	public int getSelectionLeft() {
-		return _canvas.getWidgetLeft(_border.getWidget());
-	}
-	
-	public int getSelectionTop() {
-		return _canvas.getWidgetTop(_border.getWidget());
-	}
-	
-	public int getSelectionRight() {
-		return getSelectionLeft() + _border.getWidget().getOffsetWidth();
-	}
-	
-	public int getSelectionBottom() {
-		return getSelectionTop() + _border.getWidget().getOffsetHeight();
+	public Rectangle getSelectionBounds() {
+		return new Rectangle(_canvas.getWidgetLeft(_border.getWidget()), 
+				_canvas.getWidgetTop(_border.getWidget()), 
+				_border.getWidget().getOffsetWidth(),
+				_border.getWidget().getOffsetHeight());
 	}
 	
 	@Override
@@ -108,20 +95,13 @@ public class DrawingCanvas extends AbstractWidget {
 		_canvas.setWidgetPosition(_border.getWidget(), x, y);
 	}
 	
-	private void setCurrentImage(ImageContainer image) {
-		_currentImage = image;
-	}
-	
 	public void setImagePosition(int x, int y) {
-		_canvas.setWidgetPosition(_currentImage.getWidget(), x, y);
+		_canvas.setWidgetPosition(_imagesManager.getCurrentImageWidget(), x, y);
 	}
 	
-	public int getBorderLeft() {
-		return _canvas.getWidgetLeft(_border.getWidget());
-	}
-	
-	public int getBorderTop() {
-		return _canvas.getWidgetTop(_border.getWidget());
+	public Point getBorderPosition() {
+		return new Point(_canvas.getWidgetLeft(_border.getWidget()), 
+				_canvas.getWidgetTop(_border.getWidget()));
 	}
 	
 	private void addMouseListeners() {

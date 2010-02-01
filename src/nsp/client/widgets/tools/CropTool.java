@@ -1,6 +1,7 @@
 package nsp.client.widgets.tools;
 
 import nsp.client.GWTFacade;
+import nsp.client.geom.Rectangle;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ButtonBase;
@@ -16,15 +17,18 @@ public class CropTool extends AbstractTool {
 	
 	@Override
 	protected void clicked(ButtonBase button) {
-		final int left = getCanvas().getSelectionLeft();
-		final int top = getCanvas().getSelectionTop();
-		final int right = getCanvas().getSelectionRight();
-		final int bottom = getCanvas().getSelectionBottom();
-		GWTFacade.get().cropImage(left, top, right, bottom,
+		final Rectangle bounds = getCanvas().getSelectionBounds();
+		GWTFacade.get().cropImage(
+				bounds.getMinX(), 
+				bounds.getMinY(), 
+				bounds.getMaxX(), 
+				bounds.getMaxY(),
 				new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
-				getCanvas().addImage(left, top, result);
+				getCanvas().addImage(
+						bounds.getMinX(), 
+						bounds.getMinY(), result);
 			}
 			@Override
 			public void onFailure(Throwable caught) {}

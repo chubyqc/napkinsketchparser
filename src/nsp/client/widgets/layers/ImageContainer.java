@@ -1,4 +1,6 @@
-package nsp.client.widgets;
+package nsp.client.widgets.layers;
+
+import nsp.client.widgets.AbstractWidget;
 
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;

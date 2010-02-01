@@ -2,6 +2,7 @@ package nsp.client;
 
 import nsp.client.widgets.UploadForm;
 import nsp.client.widgets.canvas.DrawingCanvas;
+import nsp.client.widgets.layers.ImagesManager;
 import nsp.client.widgets.tools.CropTool;
 import nsp.client.widgets.tools.MoveTool;
 import nsp.client.widgets.tools.Toolbar;
@@ -22,7 +23,9 @@ public class NapkinSketchParser implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		_canvas = new DrawingCanvas(1000, 1000);
+		ImagesManager _imagesManager = new ImagesManager();
+		_imagesManager.appendTo(RootPanel.get());
+		_canvas = new DrawingCanvas(1000, 1000, _imagesManager);
 		createToolbar();
 		_canvas.appendTo(RootPanel.get());
 	}
