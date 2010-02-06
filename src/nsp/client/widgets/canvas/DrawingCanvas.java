@@ -73,10 +73,12 @@ public class DrawingCanvas extends AbstractWidget {
 	
 	public void activateMove() {
 		_currentMode = _moveMode;
+		_border.hide();
 	}
 	
 	public void deactivateMove() {
 		_currentMode = _selectMode;
+		_border.show();
 	}
 	
 	public Rectangle getSelectionBounds() {
@@ -99,9 +101,18 @@ public class DrawingCanvas extends AbstractWidget {
 		_canvas.setWidgetPosition(_imagesManager.getCurrentImageWidget(), x, y);
 	}
 	
-	public Point getBorderPosition() {
-		return new Point(_canvas.getWidgetLeft(_border.getWidget()), 
-				_canvas.getWidgetTop(_border.getWidget()));
+	public Point getImagePosition() {
+		Widget image = _imagesManager.getCurrentImageWidget();
+		return new Point(_canvas.getWidgetLeft(image), _canvas.getWidgetTop(image));
+	}
+
+	public boolean isWithinImage(int x, int y) {
+		Point initialPosition = getImagePosition();
+		Widget image = _imagesManager.getCurrentImageWidget();
+		return x >= initialPosition.getX() && 
+			x <= initialPosition.getX() + image.getOffsetWidth() &&
+			y >= initialPosition.getY() && 
+			y <= initialPosition.getY() + image.getOffsetHeight();
 	}
 	
 	private void addMouseListeners() {

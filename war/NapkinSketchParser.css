@@ -3,3 +3,16 @@
 	border: 1px solid black;
 	width: 200px;
 }
+
+.layerHandle {
+	width: 100%;
+}
+
+.selectedLayerHandle {
+	color: white;
+	background: black;
+}
+
+.imageSelected {
+	border: 1px dashed black;
+}

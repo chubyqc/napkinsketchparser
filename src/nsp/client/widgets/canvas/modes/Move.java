@@ -9,11 +9,8 @@ public class Move extends AbstractMode {
 	
 	@Override
 	protected void mousePressed() {
-		_initialPosition = getCanvas().getBorderPosition();
-		_isValid = getInitialX() >= _initialPosition.getX() && 
-			getInitialX() <= _initialPosition.getX() + getBorder().getWidget().getOffsetWidth() &&
-			getInitialY() >= _initialPosition.getY() && 
-			getInitialY() <= _initialPosition.getY() + getBorder().getWidget().getOffsetHeight();
+		_initialPosition = getCanvas().getImagePosition();
+		_isValid = getCanvas().isWithinImage(getInitialX(), getInitialY());
 	}
 	
 	@Override
@@ -21,7 +18,6 @@ public class Move extends AbstractMode {
 		if (_isValid) {
 			int newX = _initialPosition.getX() + x;
 			int newY = _initialPosition.getY() + y;
-			getCanvas().setBorderPosition(newX, newY);
 			getCanvas().setImagePosition(newX, newY);
 		}
 	}

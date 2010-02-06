@@ -1,7 +1,7 @@
 package nsp.client.widgets.layers;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import nsp.client.Styles;
 import nsp.client.widgets.AbstractWidget;
@@ -11,31 +11,68 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 public class ImagesManager extends AbstractWidget {
+	
+	private static final int BASE_IMAGE_Z = 500;
 
 	private VerticalPanel _container;
-	private Set<ImageContainer> _images;
+	private Map<Widget, ImageContainer> _images;
+	
 	private ImageContainer _currentImage;
+	private LayerHandle _currentHandle;
+	private int _highestZ;
 	
 	public ImagesManager() {
-		_images = new HashSet<ImageContainer>();
+		_images = new HashMap<Widget, ImageContainer>();
 		_container = new VerticalPanel();
 		_container.setStyleName(Styles.get().getLayerList());
+		_highestZ = BASE_IMAGE_Z;
 	}
 	
 	public ImageContainer createImage(String url) {
-		ImageContainer image = new ImageContainer(url);
-		_images.add(image);
-		new LayerHandle().appendTo(_container);
-		setCurrentImage(image);
+		unselectCurrent();
+		ImageContainer image = new ImageContainer(url, _highestZ++);
+		LayerHandle handle = new LayerHandle(this, image);
+		_images.put(handle.getWidget(), image);
+		_container.insert(handle.getWidget(), 0);
+		select(handle, image);
 		return image;
 	}
 	
-	void setCurrentImage(ImageContainer image) {
-		_currentImage = image;
+	private void unselectCurrent() {
+		if (_currentImage != null) {
+			_currentImage.unselected();
+			_currentHandle.unselected();
+		}
 	}
 	
 	public Widget getCurrentImageWidget() {
 		return _currentImage.getWidget();
+	}
+	
+	void select(LayerHandle handle, ImageContainer image) {
+		unselectCurrent();
+		_currentHandle = handle;
+		_currentImage = image;
+		_currentImage.selected();
+		_currentHandle.selected();
+	}
+	
+	void moveDown(LayerHandle handle, ImageContainer image) {
+		int index = _container.getWidgetIndex(handle.getWidget());
+		if (index < _container.getWidgetCount() - 1) {
+			_container.insert(handle.getWidget(), index + 2);
+			image.moveDown();
+			_images.get(_container.getWidget(index)).moveUp();
+		}
+	}
+	
+	void moveUp(LayerHandle handle, ImageContainer image) {
+		int index = _container.getWidgetIndex(handle.getWidget());
+		if (index > 0) {
+			_container.insert(handle.getWidget(), index - 1);
+			image.moveUp();
+			_images.get(_container.getWidget(index)).moveDown();
+		}
 	}
 
 	@Override

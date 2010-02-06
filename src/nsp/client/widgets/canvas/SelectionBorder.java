@@ -20,6 +20,14 @@ public class SelectionBorder extends AbstractWidget {
 	public void setSize(int width, int height) {
 		_border.setPixelSize(width, height);
 	}
+	
+	void hide() {
+		_border.setVisible(false);
+	}
+	
+	void show() {
+		_border.setVisible(true);
+	}
 
 	@Override
 	public Widget getWidget() {
