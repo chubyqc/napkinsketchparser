@@ -6,6 +6,7 @@ import nsp.client.widgets.AbstractWidget;
 import nsp.client.widgets.canvas.modes.AbstractMode;
 import nsp.client.widgets.canvas.modes.Move;
 import nsp.client.widgets.canvas.modes.Select;
+import nsp.client.widgets.canvas.modes.SelectLayer;
 import nsp.client.widgets.layers.ImageContainer;
 import nsp.client.widgets.layers.ImagesManager;
 
@@ -30,6 +31,7 @@ public class DrawingCanvas extends AbstractWidget {
 	private AbstractMode _currentMode;
 	private AbstractMode _moveMode;
 	private AbstractMode _selectMode;
+	private AbstractMode _selectLayerMode;
 	
 	private ImagesManager _imagesManager;
 	
@@ -47,6 +49,7 @@ public class DrawingCanvas extends AbstractWidget {
 	private void initModes() {
 		_moveMode = initMode(new Move());
 		_selectMode = initMode(new Select());
+		_selectLayerMode = initMode(new SelectLayer(_imagesManager));
 		_currentMode = _selectMode;
 	}
 	
@@ -63,12 +66,22 @@ public class DrawingCanvas extends AbstractWidget {
 	public void addImage(int x, int y, String url) {
 		ImageContainer image = _imagesManager.createImage(url);
 		image.appendTo(_canvas);
-		_canvas.setWidgetPosition(image.getWidget(), x, y);
+		image.setPosition(_canvas, x, y);
 	}
 	
 	private void setSelectionBorder(SelectionBorder border) {
 		_border = border;
 		_border.appendTo(_canvas);
+	}
+	
+	public void activateSelectLayer() {
+		_currentMode = _selectLayerMode;
+		_border.hide();
+	}
+	
+	public void deactivateSelectLayer() {
+		_currentMode = _selectMode;
+		_border.show();
 	}
 	
 	public void activateMove() {
@@ -98,21 +111,16 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public void setImagePosition(int x, int y) {
-		_canvas.setWidgetPosition(_imagesManager.getCurrentImageWidget(), x, y);
+		_imagesManager.getCurrentImage().setPosition(_canvas, x, y);
 	}
 	
 	public Point getImagePosition() {
-		Widget image = _imagesManager.getCurrentImageWidget();
+		Widget image = _imagesManager.getCurrentImage().getWidget();
 		return new Point(_canvas.getWidgetLeft(image), _canvas.getWidgetTop(image));
 	}
 
 	public boolean isWithinImage(int x, int y) {
-		Point initialPosition = getImagePosition();
-		Widget image = _imagesManager.getCurrentImageWidget();
-		return x >= initialPosition.getX() && 
-			x <= initialPosition.getX() + image.getOffsetWidth() &&
-			y >= initialPosition.getY() && 
-			y <= initialPosition.getY() + image.getOffsetHeight();
+		return _imagesManager.getCurrentImage().contains(x, y);
 	}
 	
 	private void addMouseListeners() {

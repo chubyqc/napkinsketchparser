@@ -1,6 +1,6 @@
 package nsp.client.widgets.tools;
 
-public class MoveTool extends ToggleTool {
+public class Move extends Toggle {
 
 	private static final String NAME = "Move";
 	
@@ -10,7 +10,7 @@ public class MoveTool extends ToggleTool {
 	}
 	
 	@Override
-	protected void activate() {
+	protected void doActivate() {
 		getCanvas().activateMove();
 	}
 	

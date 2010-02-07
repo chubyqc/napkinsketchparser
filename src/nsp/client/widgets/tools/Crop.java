@@ -6,7 +6,7 @@ import nsp.client.geom.Rectangle;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ButtonBase;
 
-public class CropTool extends AbstractTool {
+public class Crop extends AbstractTool {
 	
 	private static final String NAME = "Crop";
 	

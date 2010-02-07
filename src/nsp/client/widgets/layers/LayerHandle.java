@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import nsp.client.widgets.AbstractWidget;
 
-public class LayerHandle extends AbstractWidget {
+class LayerHandle extends AbstractWidget {
 
 	private static final String NAME = "Layer ";
 	private static final String BTN_MOVEUP = "/\\";

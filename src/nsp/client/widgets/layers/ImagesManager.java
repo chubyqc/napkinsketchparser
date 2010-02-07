@@ -30,8 +30,8 @@ public class ImagesManager extends AbstractWidget {
 	
 	public ImageContainer createImage(String url) {
 		unselectCurrent();
-		ImageContainer image = new ImageContainer(url, _highestZ++);
-		LayerHandle handle = new LayerHandle(this, image);
+		ImageContainer image = new ImageContainer(url, this, _highestZ++);
+		LayerHandle handle = image.getHandle();
 		_images.put(handle.getWidget(), image);
 		_container.insert(handle.getWidget(), 0);
 		select(handle, image);
@@ -45,8 +45,8 @@ public class ImagesManager extends AbstractWidget {
 		}
 	}
 	
-	public Widget getCurrentImageWidget() {
-		return _currentImage.getWidget();
+	public ImageContainer getCurrentImage() {
+		return _currentImage;
 	}
 	
 	void select(LayerHandle handle, ImageContainer image) {
@@ -72,6 +72,15 @@ public class ImagesManager extends AbstractWidget {
 			_container.insert(handle.getWidget(), index - 1);
 			image.moveUp();
 			_images.get(_container.getWidget(index)).moveDown();
+		}
+	}
+
+	public void selectByPosition(int x, int y) {
+		for (ImageContainer image : _images.values()) {
+			if (image.contains(x, y)) {
+				select(image.getHandle(), image);
+				break;
+			}
 		}
 	}
 
