@@ -1,7 +1,7 @@
-package image;
+package nsp.server.image;
 
-import image.Cropper.enumTypeLine;
-import image.Cropper.enumTypeShape;
+import nsp.server.image.Cropper.Line;
+import nsp.server.image.Cropper.Shape;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -25,15 +25,15 @@ public class Main {
 		int top   = 50;
 		int right = 100;
 		int down  = 200;
-		BufferedImage imageRect = cropper.cropImage(left, top, right, down, enumTypeShape.eRectangle);
-		BufferedImage imageCircle = cropper.cropImage(left, top, right, down, enumTypeShape.eEllipse);
+		BufferedImage imageRect = cropper.cropImage(left, top, right, down, Shape.Rectangle);
+		BufferedImage imageCircle = cropper.cropImage(left, top, right, down, Shape.Ellipse);
 		
 		
 		int center = 200;
-		List<BufferedImage> listImagesVer = cropper.divideImage(center, enumTypeLine.eVertical);
-		List<BufferedImage> listImagesHor = cropper.divideImage(center, enumTypeLine.eHorizontal);
-		List<BufferedImage> listImagesRect = cropper.divideImage(left, top, right, down, enumTypeShape.eRectangle);
-		List<BufferedImage> listImagesCirc = cropper.divideImage(left, top, right, down, enumTypeShape.eEllipse);
+		List<BufferedImage> listImagesVer = cropper.divideImage(center, Line.Vertical);
+		List<BufferedImage> listImagesHor = cropper.divideImage(center, Line.Horizontal);
+		List<BufferedImage> listImagesRect = cropper.divideImage(left, top, right, down, Shape.Rectangle);
+		List<BufferedImage> listImagesCirc = cropper.divideImage(left, top, right, down, Shape.Ellipse);
 	
 		
 		fusionner1.fusionImage(imageCircle, 0, 50);

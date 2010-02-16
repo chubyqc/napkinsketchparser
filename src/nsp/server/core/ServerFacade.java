@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import nsp.server.core.config.Config;
+import nsp.server.image.Cropper;
+import nsp.server.image.ImageHelper;
 
 class ServerFacade implements IServerFacade {
 	
@@ -56,8 +58,13 @@ class ServerFacade implements IServerFacade {
 	}
 	
 	@Override
-	public String cropImage(int left, int top, int right, int bottom) throws NoImageException {
-		return getImagePath();
+	public String cropImage(int left, int top, int right, int bottom) throws Exception {
+		File croppedImage = new File(getImagesPath(), "cropped");
+		ImageHelper.saveImage(
+				new Cropper(ImageHelper.loadImage(getImagePath())).
+					cropImage(left, top, right, bottom, Cropper.Shape.Rectangle),
+					croppedImage.getAbsolutePath());
+		return croppedImage.getAbsolutePath();
 	}
 	
 	private File getImagePathFile() {

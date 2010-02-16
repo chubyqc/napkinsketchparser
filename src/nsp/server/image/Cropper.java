@@ -1,7 +1,6 @@
-package image;
+package nsp.server.image;
 
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -12,16 +11,16 @@ import java.util.List;
 
 public class Cropper extends Transformer{
 
-	public enum enumTypeLine
+	public enum Line
 	{
-		eVertical,
-		eHorizontal
+		Vertical,
+		Horizontal
 	}
 	
-	public enum enumTypeShape
+	public enum Shape
 	{
-		eRectangle,
-		eEllipse
+		Rectangle,
+		Ellipse
 	}
 	
 	public Cropper(BufferedImage imageReference)
@@ -29,21 +28,21 @@ public class Cropper extends Transformer{
 		super(imageReference);	
 	}
 	
-	public BufferedImage cropImage(int left, int top, int right, int down, enumTypeShape eShape) throws Exception
+	public BufferedImage cropImage(int left, int top, int right, int down, Shape eShape) throws Exception
 	{
 		int w = right-left;
 		int h = down-top;
 		
-		Shape shape = null;
+		java.awt.Shape shape = null;
 		
 		switch (eShape)
 		{
-		case eRectangle:
+		case Rectangle:
 			{
 				shape = new Rectangle2D.Double(0,0,w,h);
 				break;
 			}	
-		case eEllipse:
+		case Ellipse:
 			{
 				shape = new Ellipse2D.Double(0,0,w,h);	
 				break;
@@ -57,13 +56,13 @@ public class Cropper extends Transformer{
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graph = newImage.createGraphics();
 		graph.setClip(shape);
-		graph.drawImage(getImage().getSubimage(left, right, w, h), null, null);
+		graph.drawImage(getImage().getSubimage(left, top, w, h), null, null);
 		
 		return newImage;
 		
 	}
 	
-	private BufferedImage outboundImage(int left, int top, int right, int down, enumTypeShape eShape) throws Exception
+	private BufferedImage outboundImage(int left, int top, int right, int down, Shape eShape) throws Exception
 	{
 		int destImageH = down-top;
 		int destImageW = right-left;
@@ -77,11 +76,11 @@ public class Cropper extends Transformer{
 		
 		switch (eShape)
 		{
-		case eRectangle:
+		case Rectangle:
 			shapeToSubtract = new Area(new Rectangle2D.Double(left,top,destImageW,destImageH));
 			break;
 			
-		case eEllipse:
+		case Ellipse:
 			shapeToSubtract = new Area(new Ellipse2D.Double(left,top,destImageW,destImageH));
 			break;
 			
@@ -102,7 +101,7 @@ public class Cropper extends Transformer{
 	
 
 	//Divide two images from a shape (inbound and outbound the shape)	
-	public List<BufferedImage> divideImage(int left, int top, int right, int down, enumTypeShape eShape) throws Exception
+	public List<BufferedImage> divideImage(int left, int top, int right, int down, Shape eShape) throws Exception
 	{
 		ArrayList<BufferedImage> listImages = new ArrayList<BufferedImage>();
 		
@@ -115,7 +114,7 @@ public class Cropper extends Transformer{
 	
 	
 	//Divide two images in half (Vertically or Horizontally)
-	public List<BufferedImage> divideImage(int center, enumTypeLine type) throws Exception
+	public List<BufferedImage> divideImage(int center, Line type) throws Exception
 	{
 		ArrayList<BufferedImage> listImages = new ArrayList<BufferedImage>();
 		
@@ -126,14 +125,14 @@ public class Cropper extends Transformer{
 		
 		switch(type)
 		{
-		case eVertical:
+		case Vertical:
 			//Image Left
 			listImages.add(image.getSubimage(0, 0, center, height));
 			//Image Right
 			listImages.add(image.getSubimage(center, 0, width-center, height));
 			break;
 			
-		case eHorizontal:
+		case Horizontal:
 			//Image Top
 			listImages.add(image.getSubimage(0, 0, width, center));
 			//Image Down

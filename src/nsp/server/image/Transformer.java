@@ -1,4 +1,4 @@
-package image;
+package nsp.server.image;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;

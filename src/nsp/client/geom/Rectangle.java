@@ -9,13 +9,13 @@ public class Rectangle {
 	private int _height;
 	private int _width;
 	
-	public Rectangle(int minx, int miny, int maxx, int maxy) {
+	public Rectangle(int minx, int miny, int width, int height) {
 		_minx = minx;
 		_miny = miny;
-		_maxx = maxx;
-		_maxy = maxx;
-		_height = _maxy - _miny;
-		_width = _maxx - _minx;
+		_maxx = _minx + width;
+		_maxy = _miny + height;
+		_height = height;
+		_width = width;
 	}
 	
 	public int getMinX() {
