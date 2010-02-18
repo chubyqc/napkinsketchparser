@@ -95,10 +95,11 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public Rectangle getSelectionBounds() {
-		return new Rectangle(_canvas.getWidgetLeft(_border.getWidget()), 
-				_canvas.getWidgetTop(_border.getWidget()), 
-				_border.getWidget().getOffsetWidth(),
-				_border.getWidget().getOffsetHeight());
+		return _imagesManager.getCurrentImage().getInnerRectangle(
+				new Rectangle(_canvas.getWidgetLeft(_border.getWidget()),
+						_canvas.getWidgetTop(_border.getWidget()),
+						_border.getWidget().getOffsetWidth(),
+						_border.getWidget().getOffsetHeight()));
 	}
 	
 	@Override
@@ -121,6 +122,14 @@ public class DrawingCanvas extends AbstractWidget {
 
 	public boolean isWithinImage(int x, int y) {
 		return _imagesManager.getCurrentImage().contains(x, y);
+	}
+	
+	public String getLayerId() {
+		return _imagesManager.getCurrentImage().getHandle().getId();
+	}
+	
+	public String getNextLayerId() {
+		return _imagesManager.getNextLayerId();
 	}
 	
 	private void addMouseListeners() {

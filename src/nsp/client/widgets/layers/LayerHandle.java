@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import nsp.client.widgets.AbstractWidget;
 
-class LayerHandle extends AbstractWidget {
+public class LayerHandle extends AbstractWidget {
 
 	private static final String NAME = "Layer ";
 	private static final String BTN_MOVEUP = "/\\";
@@ -18,18 +18,20 @@ class LayerHandle extends AbstractWidget {
 	private static final String STYLE_SELECTED = "selectedLayerHandle";
 	private static final String STYLE_ITEM = "layerHandle";
 	
-	private static int _layerId = 0;
-	
 	private HorizontalPanel _container;
 	private Label _label;
 	private Button _moveUp;
 	private Button _moveDown;
 	private ClickHandler _handler;
 	private HandlerRegistration _registration;
+	private String _layerId;
 	
-	public LayerHandle(final ImagesManager manager, final ImageContainer image) {
+	public LayerHandle(final ImagesManager manager, final ImageContainer image,
+			String layerId) {
+		_layerId = layerId;
+		
 		_container = new HorizontalPanel();
-		_label = new Label(NAME + ++_layerId);
+		_label = new Label(NAME + _layerId);
 		_moveUp = new Button(BTN_MOVEUP);
 		_moveDown = new Button(BTN_MOVEDOWN);
 		
@@ -58,6 +60,10 @@ class LayerHandle extends AbstractWidget {
 				manager.moveDown(LayerHandle.this, image);
 			}
 		});
+	}
+	
+	public String getId() {
+		return _layerId;
 	}
 	
 	void unselected() {

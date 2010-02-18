@@ -1,6 +1,7 @@
 package nsp.client.widgets.tools;
 
 import nsp.client.GWTFacade;
+import nsp.client.geom.Point;
 import nsp.client.geom.Rectangle;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,7 +26,7 @@ public class Copy extends AbstractTool {
 	@Override
 	protected void clicked(ButtonBase button) {
 		final Rectangle bounds = getCanvas().getSelectionBounds();
-		GWTFacade.get().cropImage(
+		GWTFacade.get().copyImage(getCanvas().getLayerId(), getCanvas().getNextLayerId(),
 				bounds.getMinX(), 
 				bounds.getMinY(), 
 				bounds.getMaxX(), 
@@ -33,9 +34,10 @@ public class Copy extends AbstractTool {
 				new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
+				Point imgPosition = getCanvas().getImagePosition();
 				getCanvas().addImage(
-						bounds.getMinX(), 
-						bounds.getMinY(), result);
+						imgPosition.getX() + bounds.getMinX(), 
+						imgPosition.getY() + bounds.getMinY(), result);
 				_move.toggleDown();
 			}
 			@Override

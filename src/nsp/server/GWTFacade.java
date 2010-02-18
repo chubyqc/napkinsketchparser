@@ -17,17 +17,17 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GWTFacade extends RemoteServiceServlet implements
 		IGWTFacade {
 
-	public String getImagePath() throws NSPException {
+	public String getImagePath(String layerId) throws NSPException {
 		try {
-			return toRelativePath(getFacade().getImagePath());
+			return toRelativePath(getFacade().getImagePath(layerId));
 		} catch (Exception e) {
 			throw new NSPException();
 		}
 	}
 	
-	public String cropImage(int left, int top, int right, int bottom) throws NSPException {
+	public String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException {
 		try {
-			return toRelativePath(getFacade().cropImage(left, top, right, bottom));
+			return toRelativePath(getFacade().copyImage(srcLayerId, dstLayerId, left, top, right, bottom));
 		} catch (Exception e) {
 			throw new NSPException();
 		}

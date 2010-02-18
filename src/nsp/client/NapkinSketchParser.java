@@ -50,8 +50,8 @@ public class NapkinSketchParser implements EntryPoint {
 		toolbar.addTool(selectLayer);
 	}
 	
-	public void fileUploaded() {
-		GWTFacade.get().getImagePath(new AsyncCallback<String>() {
+	public void fileUploaded(String layerId) {
+		GWTFacade.get().getImagePath(layerId, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				_canvas.addImage(result);

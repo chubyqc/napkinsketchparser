@@ -1,6 +1,7 @@
 package nsp.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,12 +26,18 @@ public class FileHandler extends HttpServlet {
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		try {
+			InputStream input = null;
+			String layerId = null;
 			for (Object obj : upload.parseRequest(req)) {
 				FileItem fileItem = (FileItem)obj;
 				if (!fileItem.isFormField()) {
-					SessionManager.getInstance().getFacade(req.getSession()).addImage(fileItem.getInputStream());
-					break;
+					input = fileItem.getInputStream();
+				} else if (nsp.client.Utils.get().getLayerIdKey().equals(fileItem.getFieldName())) {
+					layerId = fileItem.getString();
 				}
+			}
+			if (input != null && layerId != null) {
+				SessionManager.getInstance().getFacade(req.getSession()).addImage(layerId, input);
 			}
 		} catch (FileUploadException e) {
 			e.printStackTrace();

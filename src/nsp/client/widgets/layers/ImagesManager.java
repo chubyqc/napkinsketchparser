@@ -14,6 +14,8 @@ public class ImagesManager extends AbstractWidget {
 	
 	private static final int BASE_IMAGE_Z = 500;
 
+	private static int _layerIdCpt = 0;
+
 	private VerticalPanel _container;
 	private Map<Widget, ImageContainer> _images;
 	
@@ -30,7 +32,7 @@ public class ImagesManager extends AbstractWidget {
 	
 	public ImageContainer createImage(String url) {
 		unselectCurrent();
-		ImageContainer image = new ImageContainer(url, this, _highestZ++);
+		ImageContainer image = new ImageContainer(url, this, _highestZ++, String.valueOf(++_layerIdCpt));
 		LayerHandle handle = image.getHandle();
 		_images.put(handle.getWidget(), image);
 		_container.insert(handle.getWidget(), 0);
@@ -82,6 +84,10 @@ public class ImagesManager extends AbstractWidget {
 				break;
 			}
 		}
+	}
+	
+	public String getNextLayerId() {
+		return String.valueOf(_layerIdCpt + 1);
 	}
 
 	@Override

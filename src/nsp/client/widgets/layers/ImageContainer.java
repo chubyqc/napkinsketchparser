@@ -1,5 +1,6 @@
 package nsp.client.widgets.layers;
 
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -16,10 +17,11 @@ public class ImageContainer extends AbstractWidget {
 	private int _y;
 	private int _z;
 	
-	public ImageContainer(String path, ImagesManager manager, int z) {
+	public ImageContainer(String path, ImagesManager manager, int z,
+			String layerId) {
 		_image = new Image();
 		_image.getElement().getStyle().setZIndex(_z = z);
-		_handle = new LayerHandle(manager, this);
+		_handle = new LayerHandle(manager, this, layerId);
 		updateUrl(path);
 	}
 	
@@ -61,6 +63,15 @@ public class ImageContainer extends AbstractWidget {
 		return x >= _x && y >= _y && 
 			x <= _x + getWidget().getOffsetWidth() && 
 			y <= _y + getWidget().getOffsetHeight();
+	}
+	
+	public Rectangle getInnerRectangle(Rectangle rectangle) {
+		int left = Math.max(0, rectangle.getMinX() - _x);
+		int top = Math.max(0, rectangle.getMinY() - _y);
+		int width = Math.min(getWidget().getOffsetWidth() - left, rectangle.getWidth());
+		int height = Math.min(getWidget().getOffsetHeight() - top, rectangle.getHeight());
+		
+		return new Rectangle(left, top, width, height);
 	}
 
 	@Override

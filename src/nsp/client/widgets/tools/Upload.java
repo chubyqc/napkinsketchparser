@@ -16,7 +16,7 @@ public class Upload extends AbstractTool {
 
 	@Override
 	protected void clicked(ButtonBase button) {
-		_form.submit();
+		_form.submit(getCanvas().getNextLayerId());
 	}
 
 	@Override

@@ -4,9 +4,9 @@ import java.io.InputStream;
 
 public interface IServerFacade {
 
-	void addImage(InputStream image);
+	void addImage(String layerId, InputStream image);
 	
-	String getImagePath() throws NoImageException;
+	String getImagePath(String layerId) throws NoImageException;
 	
-	String cropImage(int left, int top, int right, int bottom) throws Exception;
+	String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception;
 }

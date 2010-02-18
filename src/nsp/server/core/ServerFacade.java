@@ -11,8 +11,6 @@ import nsp.server.image.ImageHelper;
 
 class ServerFacade implements IServerFacade {
 	
-	private static final String IMAGE_NAME = "image";
-	
 	private String _id;
 	
 	ServerFacade(String id) {
@@ -21,11 +19,11 @@ class ServerFacade implements IServerFacade {
 	}
 
 	@Override
-	public void addImage(InputStream image) {
+	public void addImage(String layerId, InputStream image) {
 		FileOutputStream destination = null;
 		
 		try {
-			File dest = getImagePathFile();
+			File dest = getImagePathFile(layerId);
 			dest.createNewFile();
 		
         	destination = new FileOutputStream(dest);
@@ -49,8 +47,8 @@ class ServerFacade implements IServerFacade {
 	}
 
 	@Override
-	public String getImagePath() throws NoImageException {
-		File file = getImagePathFile();
+	public String getImagePath(String layerId) throws NoImageException {
+		File file = getImagePathFile(layerId);
 		if (!file.exists()) {
 			throw new NoImageException();
 		}
@@ -58,17 +56,17 @@ class ServerFacade implements IServerFacade {
 	}
 	
 	@Override
-	public String cropImage(int left, int top, int right, int bottom) throws Exception {
-		File croppedImage = new File(getImagesPath(), "cropped");
+	public String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception {
+		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
 		ImageHelper.saveImage(
-				new Cropper(ImageHelper.loadImage(getImagePath())).
+				new Cropper(ImageHelper.loadImage(getImagePath(srcLayerId))).
 					cropImage(left, top, right, bottom, Cropper.Shape.Rectangle),
-					croppedImage.getAbsolutePath());
-		return croppedImage.getAbsolutePath();
+					croppedImage);
+		return croppedImage;
 	}
 	
-	private File getImagePathFile() {
-		return new File(getImagesPath(), IMAGE_NAME);
+	private File getImagePathFile(String layerId) {
+		return new File(getImagesPath(), layerId);
 	}
 
 	private File getImagesPath() {

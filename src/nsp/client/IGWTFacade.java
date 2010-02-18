@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("gwtFacade")
 public interface IGWTFacade extends RemoteService {
-	String getImagePath() throws NSPException;
+	String getImagePath(String layerId) throws NSPException;
 	
-	String cropImage(int left, int top, int right, int bottom) throws NSPException;
+	String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException;
 }
