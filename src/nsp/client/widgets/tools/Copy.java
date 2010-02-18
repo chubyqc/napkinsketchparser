@@ -6,9 +6,16 @@ import nsp.client.geom.Rectangle;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ButtonBase;
 
-public class Crop extends AbstractTool {
+public class Copy extends AbstractTool {
 	
-	private static final String NAME = "Crop";
+	private static final String NAME = "Copy";
+	
+	private Move _move;
+	
+	public Copy(Move move) {
+		super();
+		_move = move;
+	}
 	
 	@Override
 	protected String getName() {
@@ -29,6 +36,7 @@ public class Crop extends AbstractTool {
 				getCanvas().addImage(
 						bounds.getMinX(), 
 						bounds.getMinY(), result);
+				_move.toggleDown();
 			}
 			@Override
 			public void onFailure(Throwable caught) {}

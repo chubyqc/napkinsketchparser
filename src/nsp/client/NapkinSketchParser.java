@@ -3,7 +3,7 @@ package nsp.client;
 import nsp.client.widgets.UploadForm;
 import nsp.client.widgets.canvas.DrawingCanvas;
 import nsp.client.widgets.layers.ImagesManager;
-import nsp.client.widgets.tools.Crop;
+import nsp.client.widgets.tools.Copy;
 import nsp.client.widgets.tools.Move;
 import nsp.client.widgets.tools.SelectLayer;
 import nsp.client.widgets.tools.Toggle;
@@ -38,9 +38,10 @@ public class NapkinSketchParser implements EntryPoint {
 		Toolbar toolbar = new Toolbar(_canvas);
 		toolbar.appendTo(RootPanel.get());
 		toolbar.addTool(new Upload(form));
-		toolbar.addTool(new Crop());
-		
+
 		Move move = new Move();
+		toolbar.addTool(new Copy(move));
+		
 		SelectLayer selectLayer = new SelectLayer();
 		move.setExclusivity(new Toggle[] { selectLayer });
 		selectLayer.setExclusivity(new Toggle[] { move });

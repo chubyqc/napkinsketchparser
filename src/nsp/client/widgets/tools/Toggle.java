@@ -28,6 +28,11 @@ public abstract class Toggle extends AbstractTool {
 			deactivate();
 		}
 	}
+	
+	void toggleDown() {
+		((ToggleButton)getWidget()).setDown(true);
+		activate();
+	}
 
 	final void activate() {
 		for (Toggle toggle : _exclusivity) {
