@@ -89,6 +89,26 @@ public class ImagesManager extends AbstractWidget {
 	public String getNextLayerId() {
 		return String.valueOf(_layerIdCpt + 1);
 	}
+	
+	public void delete() {
+		if (_currentImage != null) {
+			_images.remove(_currentHandle.getWidget());
+			_currentImage.getWidget().removeFromParent();
+			_currentHandle.getWidget().removeFromParent();
+			_currentImage = null;
+			_currentHandle = null;
+			
+			for (ImageContainer image : _images.values()) {
+				select(image.getHandle(), image);
+			}
+		}
+	}
+	
+	public void refresh() {
+		if (_currentImage != null) {
+			_currentImage.refresh();
+		}
+	}
 
 	@Override
 	public Widget getWidget() {

@@ -26,7 +26,7 @@ public class Copy extends AbstractTool {
 	@Override
 	protected void clicked(ButtonBase button) {
 		final Rectangle bounds = getCanvas().getSelectionBounds();
-		GWTFacade.get().copyImage(getCanvas().getLayerId(), getCanvas().getNextLayerId(),
+		execute(getCanvas().getLayerId(), getCanvas().getNextLayerId(),
 				bounds.getMinX(), 
 				bounds.getMinY(), 
 				bounds.getMaxX(), 
@@ -34,14 +34,22 @@ public class Copy extends AbstractTool {
 				new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
-				Point imgPosition = getCanvas().getImagePosition();
-				getCanvas().addImage(
-						imgPosition.getX() + bounds.getMinX(), 
-						imgPosition.getY() + bounds.getMinY(), result);
-				_move.toggleDown();
+				done(bounds, result);
 			}
 			@Override
 			public void onFailure(Throwable caught) {}
 		});
+	}
+	
+	protected void execute(String srcLayerId, String dstLayerId, int xMin, int yMin, int xMax, int yMax, AsyncCallback<String> callback) {
+		GWTFacade.get().copyImage(srcLayerId, dstLayerId, xMin, yMin, xMax, yMax, callback);
+	}
+	
+	protected void done(Rectangle bounds, String result) {
+		Point imgPosition = getCanvas().getImagePosition();
+		getCanvas().addImage(
+				imgPosition.getX() + bounds.getMinX(), 
+				imgPosition.getY() + bounds.getMinY(), result);
+		_move.toggleDown();
 	}
 }

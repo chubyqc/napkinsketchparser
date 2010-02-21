@@ -25,7 +25,7 @@ public class Cropper extends Transformer{
 	
 	public Cropper(BufferedImage imageReference)
 	{
-		super(imageReference);	
+		super(imageReference);
 	}
 	
 	public BufferedImage cropImage(int left, int top, int right, int down, Shape eShape) throws Exception
@@ -52,7 +52,7 @@ public class Cropper extends Transformer{
 				throw new Exception("This type isn't supported");
 			}
 		}
-		
+
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graph = newImage.createGraphics();
 		graph.setClip(shape);

@@ -4,6 +4,8 @@ import nsp.client.widgets.UploadForm;
 import nsp.client.widgets.canvas.DrawingCanvas;
 import nsp.client.widgets.layers.ImagesManager;
 import nsp.client.widgets.tools.Copy;
+import nsp.client.widgets.tools.Cut;
+import nsp.client.widgets.tools.Delete;
 import nsp.client.widgets.tools.Move;
 import nsp.client.widgets.tools.SelectLayer;
 import nsp.client.widgets.tools.Toggle;
@@ -14,16 +16,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class NapkinSketchParser implements EntryPoint {
 	
 	private DrawingCanvas _canvas;
 	
-	/**
-	 * This is the entry point method.
-	 */
 	public void onModuleLoad() {
 		ImagesManager _imagesManager = new ImagesManager();
 		_imagesManager.appendTo(RootPanel.get());
@@ -41,13 +37,15 @@ public class NapkinSketchParser implements EntryPoint {
 
 		Move move = new Move();
 		toolbar.addTool(new Copy(move));
+		toolbar.addTool(new Cut(move));
+		toolbar.addTool(move);
 		
 		SelectLayer selectLayer = new SelectLayer();
 		move.setExclusivity(new Toggle[] { selectLayer });
 		selectLayer.setExclusivity(new Toggle[] { move });
 		
-		toolbar.addTool(move);
 		toolbar.addTool(selectLayer);
+		toolbar.addTool(new Delete());
 	}
 	
 	public void fileUploaded(String layerId) {

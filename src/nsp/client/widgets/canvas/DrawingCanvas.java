@@ -132,6 +132,14 @@ public class DrawingCanvas extends AbstractWidget {
 		return _imagesManager.getNextLayerId();
 	}
 	
+	public void delete() {
+		_imagesManager.delete();
+	}
+	
+	public void refresh() {
+		_imagesManager.refresh();
+	}
+	
 	private void addMouseListeners() {
 		final MouseMoveHandler moveHandler = new MouseMoveHandler() {
 			@Override

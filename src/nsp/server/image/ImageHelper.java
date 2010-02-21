@@ -3,6 +3,7 @@ package nsp.server.image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -61,6 +62,29 @@ public class ImageHelper {
 		return image;
 	}
 	
+	public static void saveImage(File dst, InputStream inputImg) throws IOException {
+		FileOutputStream destination = null;
+		
+		try {
+			destination = new FileOutputStream(dst);
+        	
+        	byte[] buffer = new byte[8192];
+        	int read;
+        	while ((read = inputImg.read(buffer)) > 0) {
+        		destination.write(buffer, 0, read);
+        	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(destination != null) {
+				try {
+					destination.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	public static void saveImage(BufferedImage image, String sFile)
 	{
@@ -70,7 +94,6 @@ public class ImageHelper {
 			ImageIO.write(image, "png", outputFile);
 		}catch(IOException e){
 		}
-		
 	}
 	
 	public static void saveImage(List<BufferedImage> images, String sFilePattern) throws Exception

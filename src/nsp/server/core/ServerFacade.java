@@ -1,9 +1,9 @@
 package nsp.server.core;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
@@ -20,29 +20,13 @@ class ServerFacade implements IServerFacade {
 
 	@Override
 	public void addImage(String layerId, InputStream image) {
-		FileOutputStream destination = null;
-		
 		try {
 			File dest = getImagePathFile(layerId);
 			dest.createNewFile();
 		
-        	destination = new FileOutputStream(dest);
-        	
-        	byte[] buffer = new byte[8192];
-        	int read;
-        	while ((read = image.read(buffer)) > 0) {
-        		destination.write(buffer, 0, read);
-        	}
+			ImageHelper.saveImage(dest, image);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(destination != null) {
-				try {
-					destination.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -62,6 +46,16 @@ class ServerFacade implements IServerFacade {
 				new Cropper(ImageHelper.loadImage(getImagePath(srcLayerId))).
 					cropImage(left, top, right, bottom, Cropper.Shape.Rectangle),
 					croppedImage);
+		return croppedImage;
+	}
+	
+	@Override
+	public String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception {
+		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
+		List<BufferedImage> images = new Cropper(ImageHelper.loadImage(getImagePath(srcLayerId))).
+			divideImage(left, top, right, bottom, Cropper.Shape.Rectangle);
+		ImageHelper.saveImage(images.get(0), croppedImage);
+		ImageHelper.saveImage(images.get(1), getImagePath(srcLayerId));
 		return croppedImage;
 	}
 	

@@ -33,6 +33,14 @@ public class GWTFacade extends RemoteServiceServlet implements
 		}
 	}
 	
+	public String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException {
+		try {
+			return toRelativePath(getFacade().cutImage(srcLayerId, dstLayerId, left, top, right, bottom));
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+	
 	private String toRelativePath(String absolutePath) {
 		HttpServletRequest req = getRequest();
 		return absolutePath.substring(

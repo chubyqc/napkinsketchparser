@@ -10,19 +10,24 @@ import com.google.gwt.user.client.ui.Widget;
 public class ImageContainer extends AbstractWidget {
 	
 	private static final String STYLE_SELECTED = "imageSelected";
+	private static final String URL_MIDDLEPART = "?r=";
 	
 	private Image _image;
 	private LayerHandle _handle;
 	private int _x;
 	private int _y;
 	private int _z;
+	private String _baseUrl;
+	private int _refreshCount;
 	
 	public ImageContainer(String path, ImagesManager manager, int z,
 			String layerId) {
 		_image = new Image();
 		_image.getElement().getStyle().setZIndex(_z = z);
 		_handle = new LayerHandle(manager, this, layerId);
-		updateUrl(path);
+		_refreshCount = 0;
+		_baseUrl = path;
+		refresh();
 	}
 	
 	public ImageContainer() {
@@ -37,16 +42,16 @@ public class ImageContainer extends AbstractWidget {
 		_image.removeStyleName(STYLE_SELECTED);
 	}
 	
-	public void updateUrl(String path) {
-		_image.setUrl(path);
-	}
-	
 	void moveUp() {
 		_image.getElement().getStyle().setZIndex(++_z);
 	}
 	
 	void moveDown() {
 		_image.getElement().getStyle().setZIndex(--_z);
+	}
+	
+	void refresh() {
+		_image.setUrl(_baseUrl + URL_MIDDLEPART + ++_refreshCount);
 	}
 	
 	public LayerHandle getHandle() {
@@ -65,11 +70,19 @@ public class ImageContainer extends AbstractWidget {
 			y <= _y + getWidget().getOffsetHeight();
 	}
 	
+	private int getInnerWidth() {
+		return getWidget().getElement().getClientWidth();
+	}
+	
+	private int getInnerHeight() {
+		return getWidget().getElement().getClientHeight();
+	}
+	
 	public Rectangle getInnerRectangle(Rectangle rectangle) {
 		int left = Math.max(0, rectangle.getMinX() - _x);
 		int top = Math.max(0, rectangle.getMinY() - _y);
-		int width = Math.min(getWidget().getOffsetWidth() - left, rectangle.getWidth());
-		int height = Math.min(getWidget().getOffsetHeight() - top, rectangle.getHeight());
+		int width = Math.min(getInnerWidth(), rectangle.getMaxX() - _x) - left;
+		int height = Math.min(getInnerHeight(), rectangle.getMaxY() - _y) - top;
 		
 		return new Rectangle(left, top, width, height);
 	}

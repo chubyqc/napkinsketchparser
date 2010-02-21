@@ -9,4 +9,6 @@ public interface IServerFacade {
 	String getImagePath(String layerId) throws NoImageException;
 	
 	String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception;
+	
+	String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception;
 }
