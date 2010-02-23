@@ -5,7 +5,7 @@ import nsp.client.widgets.canvas.DrawingCanvas;
 import nsp.client.widgets.layers.ImagesManager;
 import nsp.client.widgets.tools.Copy;
 import nsp.client.widgets.tools.Cut;
-import nsp.client.widgets.tools.Delete;
+import nsp.client.widgets.tools.Merge;
 import nsp.client.widgets.tools.Move;
 import nsp.client.widgets.tools.SelectLayer;
 import nsp.client.widgets.tools.Toggle;
@@ -45,7 +45,7 @@ public class NapkinSketchParser implements EntryPoint {
 		selectLayer.setExclusivity(new Toggle[] { move });
 		
 		toolbar.addTool(selectLayer);
-		toolbar.addTool(new Delete());
+		toolbar.addTool(new Merge());
 	}
 	
 	public void fileUploaded(String layerId) {

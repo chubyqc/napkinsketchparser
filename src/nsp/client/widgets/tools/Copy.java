@@ -26,19 +26,22 @@ public class Copy extends AbstractTool {
 	@Override
 	protected void clicked(ButtonBase button) {
 		final Rectangle bounds = getCanvas().getSelectionBounds();
-		execute(getCanvas().getLayerId(), getCanvas().getNextLayerId(),
-				bounds.getMinX(), 
-				bounds.getMinY(), 
-				bounds.getMaxX(), 
-				bounds.getMaxY(),
-				new AsyncCallback<String>() {
-			@Override
-			public void onSuccess(String result) {
-				done(bounds, result);
-			}
-			@Override
-			public void onFailure(Throwable caught) {}
-		});
+		if (bounds.getMinX() < bounds.getMaxX() &&
+				bounds.getMinY() < bounds.getMaxY()) {
+			execute(getCanvas().getLayerId(), getCanvas().getNextLayerId(),
+					bounds.getMinX(), 
+					bounds.getMinY(), 
+					bounds.getMaxX(), 
+					bounds.getMaxY(),
+					new AsyncCallback<String>() {
+				@Override
+				public void onSuccess(String result) {
+					done(bounds, result);
+				}
+				@Override
+				public void onFailure(Throwable caught) {}
+			});
+		}
 	}
 	
 	protected void execute(String srcLayerId, String dstLayerId, int xMin, int yMin, int xMax, int yMax, AsyncCallback<String> callback) {

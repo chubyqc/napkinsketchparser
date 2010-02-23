@@ -15,6 +15,7 @@ public class LayerHandle extends AbstractWidget {
 	private static final String NAME = "Layer ";
 	private static final String BTN_MOVEUP = "/\\";
 	private static final String BTN_MOVEDOWN = "\\/";
+	private static final String BTN_DELETE = "X";
 	private static final String STYLE_SELECTED = "selectedLayerHandle";
 	private static final String STYLE_ITEM = "layerHandle";
 	
@@ -22,6 +23,7 @@ public class LayerHandle extends AbstractWidget {
 	private Label _label;
 	private Button _moveUp;
 	private Button _moveDown;
+	private Button _delete;
 	private ClickHandler _handler;
 	private HandlerRegistration _registration;
 	private String _layerId;
@@ -34,11 +36,13 @@ public class LayerHandle extends AbstractWidget {
 		_label = new Label(NAME + _layerId);
 		_moveUp = new Button(BTN_MOVEUP);
 		_moveDown = new Button(BTN_MOVEDOWN);
+		_delete = new Button(BTN_DELETE);
 		
 		_container.addStyleName(STYLE_ITEM);
 		_container.add(_label);
 		_container.add(_moveUp);
 		_container.add(_moveDown);
+		_container.add(_delete);
 		
 		_handler = new ClickHandler() {
 			@Override
@@ -58,6 +62,12 @@ public class LayerHandle extends AbstractWidget {
 			@Override
 			public void onClick(ClickEvent event) {
 				manager.moveDown(LayerHandle.this, image);
+			}
+		});
+		_delete.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				manager.delete(LayerHandle.this, image);
 			}
 		});
 	}

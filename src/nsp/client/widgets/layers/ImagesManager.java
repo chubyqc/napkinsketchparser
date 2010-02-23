@@ -77,6 +77,21 @@ public class ImagesManager extends AbstractWidget {
 		}
 	}
 
+	public void delete(LayerHandle layerHandle, ImageContainer image) {
+		_images.remove(layerHandle.getWidget());
+		
+		if (image == _currentImage) {
+			_currentImage = null;
+			_currentHandle = null;
+			for (ImageContainer item : _images.values()) {
+				select(item.getHandle(), item);
+				break;
+			}
+		}
+		image.getWidget().removeFromParent();
+		layerHandle.getWidget().removeFromParent();
+	}
+
 	public void selectByPosition(int x, int y) {
 		for (ImageContainer image : _images.values()) {
 			if (image.contains(x, y)) {
@@ -88,20 +103,6 @@ public class ImagesManager extends AbstractWidget {
 	
 	public String getNextLayerId() {
 		return String.valueOf(_layerIdCpt + 1);
-	}
-	
-	public void delete() {
-		if (_currentImage != null) {
-			_images.remove(_currentHandle.getWidget());
-			_currentImage.getWidget().removeFromParent();
-			_currentHandle.getWidget().removeFromParent();
-			_currentImage = null;
-			_currentHandle = null;
-			
-			for (ImageContainer image : _images.values()) {
-				select(image.getHandle(), image);
-			}
-		}
 	}
 	
 	public void refresh() {
