@@ -7,6 +7,7 @@ import java.util.List;
 
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
+import nsp.server.image.Fusion;
 import nsp.server.image.ImageHelper;
 
 class ServerFacade implements IServerFacade {
@@ -59,11 +60,34 @@ class ServerFacade implements IServerFacade {
 		return croppedImage;
 	}
 	
+	@Override
+	public void mergeImage(String[] layerIds, int[] lefts, int[] tops,
+			int[] rights, int[] bottoms) throws Exception {
+		int left = Integer.MAX_VALUE;
+		int top = Integer.MAX_VALUE;
+		int right = Integer.MIN_VALUE;
+		int bottom = Integer.MIN_VALUE;
+		for (int i = 0; i < layerIds.length; ++i) {
+			left = Math.max(0, Math.min(left, lefts[i]));
+			top = Math.max(0, Math.min(top, tops[i]));
+			right = Math.min(Config.get().getCanvasWidth(), Math.max(right, rights[i]));
+			bottom = Math.min(Config.get().getCanvasHeight(), Math.max(bottom, bottoms[i]));
+		}
+		Fusion fusion = new Fusion(right - left, bottom - top);
+		for (int i = 0; i < layerIds.length; ++i) {
+			fusion.fusionImage(ImageHelper.loadImage(getImagePath(layerIds[i])), 
+					lefts[i] - left, tops[i] - top);
+		}
+		if (layerIds.length > 0) {
+			ImageHelper.saveImage(fusion.getImage(), getImagePath(layerIds[0]));
+		}
+	}
+	
 	private File getImagePathFile(String layerId) {
 		return new File(getImagesPath(), layerId);
 	}
 
 	private File getImagesPath() {
-		return new File(new File(Config.getInstance().getImagesPath()), _id);
+		return new File(new File(Config.get().getImagesPath()), _id);
 	}
 }

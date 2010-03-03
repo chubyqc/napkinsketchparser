@@ -1,5 +1,9 @@
 package nsp.client.widgets.canvas;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import nsp.client.geom.Point;
 import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
@@ -69,6 +73,22 @@ public class DrawingCanvas extends AbstractWidget {
 		image.setPosition(_canvas, x, y);
 	}
 	
+	public void layerMerged(int newX, int newY) {
+		Iterator<ImageContainer> ite = getSelectedLayers().iterator();
+		if (ite.hasNext()) {
+			ImageContainer layer = ite.next();
+			setImagePosition(newX, newY);
+			layer.refresh();
+			Collection<ImageContainer> toRemove = new LinkedList<ImageContainer>();
+			while (ite.hasNext()) {
+				toRemove.add(ite.next());
+			}
+			for (ImageContainer layerToRemove : toRemove) {
+				_imagesManager.delete(layerToRemove.getHandle(), layerToRemove);
+			}
+		}
+	}
+	
 	private void setSelectionBorder(SelectionBorder border) {
 		_border = border;
 		_border.appendTo(_canvas);
@@ -126,6 +146,10 @@ public class DrawingCanvas extends AbstractWidget {
 	
 	public String getLayerId() {
 		return _imagesManager.getCurrentImage().getHandle().getId();
+	}
+	
+	public Collection<ImageContainer> getSelectedLayers() {
+		return _imagesManager.getSelectedLayers();
 	}
 	
 	public String getNextLayerId() {

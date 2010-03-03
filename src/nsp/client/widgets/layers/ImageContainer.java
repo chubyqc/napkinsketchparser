@@ -34,6 +34,22 @@ public class ImageContainer extends AbstractWidget {
 		_image = new Image();
 	}
 	
+	public int getLeft() {
+		return _x;
+	}
+	
+	public int getTop() {
+		return _y;
+	}
+	
+	public int getRight() {
+		return _x + _image.getWidth();
+	}
+	
+	public int getBottom() {
+		return _y + _image.getHeight();
+	}
+	
 	void selected() {
 		_image.addStyleName(STYLE_SELECTED);
 	}
@@ -50,7 +66,7 @@ public class ImageContainer extends AbstractWidget {
 		_image.getElement().getStyle().setZIndex(--_z);
 	}
 	
-	void refresh() {
+	public void refresh() {
 		_image.setUrl(_baseUrl + URL_MIDDLEPART + ++_refreshCount);
 	}
 	

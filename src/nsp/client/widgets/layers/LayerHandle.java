@@ -47,7 +47,8 @@ public class LayerHandle extends AbstractWidget {
 		_handler = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				manager.select(LayerHandle.this, image);
+				manager.select(LayerHandle.this, image, 
+						event.getNativeEvent().getCtrlKey());
 			}
 		};
 		_registration = _label.addClickHandler(_handler);
@@ -81,10 +82,12 @@ public class LayerHandle extends AbstractWidget {
 		_registration = _label.addClickHandler(_handler);
 	}
 	
-	void selected() {
+	void selected(boolean append) {
 		_container.addStyleName(STYLE_SELECTED);
-		_registration.removeHandler();
-		_registration = null;
+		if (!append) {
+			_registration.removeHandler();
+			_registration = null;
+		}
 	}
 
 	@Override

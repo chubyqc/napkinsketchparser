@@ -13,4 +13,6 @@ public interface IGWTFacade extends RemoteService {
 	String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException;
 	
 	String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException;
+	
+	void mergeImages(String[] layerIds, int[] lefts, int[] tops, int[] rights, int[] bottoms) throws NSPException;
 }

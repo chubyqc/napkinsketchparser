@@ -10,4 +10,7 @@ public interface IGWTFacadeAsync {
 	
 	void cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
 			AsyncCallback<String> callback);
+	
+	void mergeImages(String[] layerIds, int[] lefts, int[] tops, int[] rights, int[] bottoms,
+			AsyncCallback<Void> callback);
 }

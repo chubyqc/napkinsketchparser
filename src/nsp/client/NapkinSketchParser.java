@@ -13,6 +13,7 @@ import nsp.client.widgets.tools.Toolbar;
 import nsp.client.widgets.tools.Upload;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -26,6 +27,8 @@ public class NapkinSketchParser implements EntryPoint {
 		_canvas = new DrawingCanvas(1000, 1000, _imagesManager);
 		createToolbar();
 		_canvas.appendTo(RootPanel.get());
+		
+		RootPanel.get().sinkEvents(Event.KEYEVENTS);
 	}
 	
 	private void createToolbar() {
