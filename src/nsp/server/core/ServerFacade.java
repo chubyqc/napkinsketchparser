@@ -8,7 +8,7 @@ import java.util.List;
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
-import nsp.server.image.ImageHelper;
+import nsp.server.image.Utils;
 
 class ServerFacade implements IServerFacade {
 	
@@ -25,7 +25,7 @@ class ServerFacade implements IServerFacade {
 			File dest = getImagePathFile(layerId);
 			dest.createNewFile();
 		
-			ImageHelper.saveImage(dest, image);
+			Utils.get().saveImage(dest, image);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,8 +43,8 @@ class ServerFacade implements IServerFacade {
 	@Override
 	public String copyImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception {
 		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
-		ImageHelper.saveImage(
-				new Cropper(ImageHelper.loadImage(getImagePath(srcLayerId))).
+		Utils.get().saveImage(
+				new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
 					cropImage(left, top, right, bottom, Cropper.Shape.Rectangle),
 					croppedImage);
 		return croppedImage;
@@ -53,10 +53,10 @@ class ServerFacade implements IServerFacade {
 	@Override
 	public String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception {
 		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
-		List<BufferedImage> images = new Cropper(ImageHelper.loadImage(getImagePath(srcLayerId))).
+		List<BufferedImage> images = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
 			divideImage(left, top, right, bottom, Cropper.Shape.Rectangle);
-		ImageHelper.saveImage(images.get(0), croppedImage);
-		ImageHelper.saveImage(images.get(1), getImagePath(srcLayerId));
+		Utils.get().saveImage(images.get(0), croppedImage);
+		Utils.get().saveImage(images.get(1), getImagePath(srcLayerId));
 		return croppedImage;
 	}
 	
@@ -75,11 +75,11 @@ class ServerFacade implements IServerFacade {
 		}
 		Fusion fusion = new Fusion(right - left, bottom - top);
 		for (int i = 0; i < layerIds.length; ++i) {
-			fusion.fusionImage(ImageHelper.loadImage(getImagePath(layerIds[i])), 
+			fusion.fusionImage(Utils.get().loadImage(getImagePath(layerIds[i])), 
 					lefts[i] - left, tops[i] - top);
 		}
 		if (layerIds.length > 0) {
-			ImageHelper.saveImage(fusion.getImage(), getImagePath(layerIds[0]));
+			Utils.get().saveImage(fusion.getImage(), getImagePath(layerIds[0]));
 		}
 	}
 	

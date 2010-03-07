@@ -53,7 +53,7 @@ public class Cropper extends Transformer{
 			}
 		}
 
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage newImage = Utils.get().newImage(w, h);
 		Graphics2D graph = newImage.createGraphics();
 		graph.setClip(shape);
 		graph.drawImage(getImage().getSubimage(left, top, w, h), null, null);
@@ -90,7 +90,7 @@ public class Cropper extends Transformer{
 		}
 		wholeShape.subtract(shapeToSubtract);
 	
-		BufferedImage newImage = new BufferedImage(srcImageW, srcImageH, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage newImage = Utils.get().newImage(srcImageW, srcImageH);
 		Graphics2D graph = newImage.createGraphics();
 		graph.setClip(wholeShape);
 		graph.drawImage(image, null, null);

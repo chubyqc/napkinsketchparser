@@ -7,7 +7,7 @@ public class Fusion extends Transformer{
 
 	public Fusion(int width, int height)
 	{
-		super(new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR));
+		super(Utils.get().newImage(width, height));
 	}
 	
 	public Fusion(BufferedImage imageReference)
