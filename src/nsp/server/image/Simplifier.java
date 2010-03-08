@@ -34,6 +34,10 @@ public class Simplifier {
 		return simplified;
 	}
 	
+	public boolean isPixelOn(int pixel) {
+		return pixel == PIXEL_ON;
+	}
+	
 	public BufferedImage simplify(BufferedImage complex, int newWidth, int newHeight) {
 		return simplify(complex, newWidth, newHeight, PIXEL_ONPERCENTAGE);
 	}
@@ -67,5 +71,10 @@ public class Simplifier {
 		BufferedImage complex = Utils.get().loadImage("/home/chubyqc/complex.png");
 		BufferedImage simple = get().simplify(complex, 10, 10);
 		Utils.get().saveImage(simple, "/home/chubyqc/simple.png");
+		
+		BufferedImage secondSimple = Utils.get().loadImage("/home/chubyqc/secondSimple.png");
+
+		System.out.println(Comparer.get().compare(simple, secondSimple));
+		System.out.println(Comparer.get().isAlike(simple, secondSimple));
 	}
 }
