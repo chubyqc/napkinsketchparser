@@ -3,14 +3,14 @@ package nsp.server.recognition.builders;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-import nsp.server.image.Utils;
+import nsp.server.Utils;
 
 public class Circle implements IShapeBuilder {
 	
 	private IComparer _comparer;
 	
 	public Circle() {
-		_comparer = new Comparer(this, Utils.get().loadImage("/home/chubyqc/circle.png"));
+		_comparer = new Comparer(this, Utils.get().loadImage(Utils.get().toRealPath("shapes/circle.png")));
 	}
 
 	@Override

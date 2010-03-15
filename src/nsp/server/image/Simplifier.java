@@ -2,20 +2,21 @@ package nsp.server.image;
 
 import java.awt.image.BufferedImage;
 
+import nsp.server.Utils;
+
 public class Simplifier {
 	private static final Simplifier _instance = new Simplifier();
 	public static Simplifier get() {
 		return _instance;
 	}
 	
-	private static final byte PIXEL_MAXVALUE = 123;
 	private static final int PIXEL_ON = 0xff000000;
 	private static final int PIXEL_OFF = 0xffffffff;
 	private static final double PIXEL_ONPERCENTAGE = .1;
 	
 	private Simplifier() {}
 	
-	public BufferedImage simplify(BufferedImage complex, int newWidth, int newHeight,
+	private BufferedImage simplify(BufferedImage complex, int tolerance, int newWidth, int newHeight,
 			double pixelOnPercentage) {
 		int pixelWidth = complex.getWidth() / newWidth;
 		int pixelHeight = complex.getHeight() / newHeight;
@@ -27,10 +28,10 @@ public class Simplifier {
 			for (int j = 0; j < newWidth; ++j) {
 				complex.getRGB(j * pixelWidth, i * pixelHeight, pixelWidth, 
 						pixelHeight, buffer, 0, pixelWidth);
-				simplified.setRGB(j, i, getSimplifiedPixel(buffer, pixelOnPercentage));
+				simplified.setRGB(j, i, getSimplifiedPixel(buffer, tolerance, pixelOnPercentage));
 			}
 		}
-		
+Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 		return simplified;
 	}
 	
@@ -38,17 +39,17 @@ public class Simplifier {
 		return pixel == PIXEL_ON;
 	}
 	
-	public BufferedImage simplify(BufferedImage complex, int newWidth, int newHeight) {
-		return simplify(complex, newWidth, newHeight, PIXEL_ONPERCENTAGE);
+	public BufferedImage simplify(BufferedImage complex, int tolerance, int newWidth, int newHeight) {
+		return simplify(complex, tolerance, newWidth, newHeight, PIXEL_ONPERCENTAGE);
 	}
 	
-	private int getSimplifiedPixel(int[] complexPixel, double pixelOnPercentage) {
+	private int getSimplifiedPixel(int[] complexPixel, int tolerance, double pixelOnPercentage) {
 		int pixelOnCount = 0;
 		for (int i = 0; i < complexPixel.length; ++i) {
 			int pixel = complexPixel[i];
-			if (getRedComponent(pixel) <= PIXEL_MAXVALUE ||
-					getGreenComponent(pixel) <= PIXEL_MAXVALUE ||
-					getBlueComponent(pixel) <= PIXEL_MAXVALUE) {
+			if (getRedComponent(pixel) <= tolerance ||
+					getGreenComponent(pixel) <= tolerance ||
+					getBlueComponent(pixel) <= tolerance) {
 				++pixelOnCount;
 			}
 		}
@@ -69,7 +70,7 @@ public class Simplifier {
 	
 	public static void main(String[] args) {
 		BufferedImage complex = Utils.get().loadImage("/home/chubyqc/complex.png");
-		BufferedImage simple = get().simplify(complex, 10, 10);
+		BufferedImage simple = get().simplify(complex, 225, 10, 10);
 		Utils.get().saveImage(simple, "/home/chubyqc/simple.png");
 		
 		BufferedImage secondSimple = Utils.get().loadImage("/home/chubyqc/secondSimple.png");

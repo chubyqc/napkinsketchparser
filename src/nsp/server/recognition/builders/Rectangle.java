@@ -2,14 +2,14 @@ package nsp.server.recognition.builders;
 
 import java.awt.Shape;
 
-import nsp.server.image.Utils;
+import nsp.server.Utils;
 
 public class Rectangle implements IShapeBuilder {
 	
 	private IComparer _comparer;
 	
 	public Rectangle() {
-		_comparer = new Comparer(this, Utils.get().loadImage("/home/chubyqc/rectangle.png"));
+		_comparer = new Comparer(this, Utils.get().loadImage("shapes/rectangle.png"));
 	}
 
 	@Override

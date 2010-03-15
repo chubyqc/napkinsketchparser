@@ -23,5 +23,4 @@ public class Upload extends AbstractTool {
 	protected String getName() {
 		return NAME;
 	}
-
 }

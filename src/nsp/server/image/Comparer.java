@@ -31,7 +31,7 @@ public class Comparer {
 				}
 			}
 		}
-		return (double)alikePixelCount / pixelOnCount;
+		return (pixelOnCount == 0) ? 0 : (double)alikePixelCount / pixelOnCount;
 	}
 	
 	public boolean isAlike(double score) {

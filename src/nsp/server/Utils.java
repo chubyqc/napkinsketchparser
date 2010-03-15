@@ -1,5 +1,8 @@
-package nsp.server.image;
+package nsp.server;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -17,9 +20,19 @@ public class Utils {
 		return _instance;
 	}
 	
+	private String _appPath;
+	
 	private Utils() {}
 	
-	BufferedImage newImage(int width, int height) {
+	public void setAppPath(String absolutePath) {
+		_appPath = absolutePath;
+	}
+	
+	public String toRealPath(String relativePath) {
+		return _appPath + relativePath;
+	}
+	
+	public BufferedImage newImage(int width, int height) {
 		return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	}
 
@@ -103,6 +116,16 @@ public class Utils {
 			File outputFile = new File(sFile);
 			ImageIO.write(image, "png", outputFile);
 		}catch(IOException e){
+		}
+	}
+	
+	public void save(Shape shape, String filePath) {
+		if (shape != null) {
+			BufferedImage img = newImage(shape.getBounds().width + 1, shape.getBounds().height + 1);
+			Graphics2D g = img.createGraphics();
+			g.setColor(Color.BLACK);
+			g.draw(shape);
+			saveImage(img, filePath);
 		}
 	}
 	

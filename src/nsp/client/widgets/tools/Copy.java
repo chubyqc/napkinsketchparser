@@ -3,6 +3,7 @@ package nsp.client.widgets.tools;
 import nsp.client.GWTFacade;
 import nsp.client.geom.Point;
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.Options;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ButtonBase;
@@ -14,7 +15,11 @@ public class Copy extends AbstractTool {
 	private Move _move;
 	
 	public Copy(Move move) {
-		super();
+		this(move, null);
+	}
+	
+	protected Copy(Move move, Options options) {
+		super(options);
 		_move = move;
 	}
 	

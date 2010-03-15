@@ -1,5 +1,7 @@
 package nsp.client;
 
+import nsp.client.widgets.tools.options.ToShapeOptions;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -15,4 +17,7 @@ public interface IGWTFacade extends RemoteService {
 	String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException;
 	
 	void mergeImages(String[] layerIds, int[] lefts, int[] tops, int[] rights, int[] bottoms) throws NSPException;
+	
+	String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options) throws NSPException;
 }

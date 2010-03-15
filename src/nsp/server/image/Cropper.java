@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import nsp.server.Utils;
+
 
 public class Cropper extends Transformer{
 

@@ -41,8 +41,9 @@ class LineComparer implements IComparer {
 			}
 		}
 
-		return new LineResult(_builder, (double)pixelOnCount / Math.abs(y1 - y0),
-				x0, y0, x1, y1);
+		int ys = Math.abs(y1 - y0);
+		return new LineResult(_builder, (ys == 0) ? 0 : (double)pixelOnCount / ys,
+				width, height, x0, y0, x1, y1);
 	}
 	
 	private int[] getX1Y1(int width, int height, int[] row, BufferedImage shape) {

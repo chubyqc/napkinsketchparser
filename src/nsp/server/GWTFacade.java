@@ -1,10 +1,12 @@
 package nsp.server;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import nsp.client.IGWTFacade;
 import nsp.client.NSPException;
+import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.core.IServerFacade;
 import nsp.server.core.SessionManager;
 
@@ -16,6 +18,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class GWTFacade extends RemoteServiceServlet implements
 		IGWTFacade {
+	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		Utils.get().setAppPath(getServletContext().getRealPath(new String()));
+	}
 
 	public String getImagePath(String layerId) throws NSPException {
 		try {
@@ -36,6 +44,16 @@ public class GWTFacade extends RemoteServiceServlet implements
 	public String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws NSPException {
 		try {
 			return toRelativePath(getFacade().cutImage(srcLayerId, dstLayerId, left, top, right, bottom));
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+	
+	public String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options) throws NSPException {
+		try {
+			return toRelativePath(getFacade().toShape(srcLayerId, dstLayerId, left, 
+					top, right, bottom, options));
 		} catch (Exception e) {
 			throw new NSPException();
 		}

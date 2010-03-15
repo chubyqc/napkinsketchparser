@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import nsp.server.image.Utils;
+import nsp.server.Utils;
+import nsp.server.image.Simplifier;
 import nsp.server.recognition.builders.Circle;
 import nsp.server.recognition.builders.IShapeBuilder;
 import nsp.server.recognition.builders.Line;
@@ -18,6 +19,9 @@ public class ShapeMatching {
 	public static ShapeMatching get() {
 		return _instance;
 	}
+	
+	private static final int SIMPLE_WIDTH = 10;
+	private static final int SIMPLE_HEIGHT = 10;
 	
 	private Collection<IShapeBuilder> _shapes;
 	
@@ -32,11 +36,16 @@ public class ShapeMatching {
 		Result bestResult = null;
 		for (IShapeBuilder shape : _shapes) {
 			Result result = shape.getComparer().compare(img);
+			System.err.println(result.getScore());
 			if (bestResult == null || result.getScore() > bestResult.getScore()) {
 				bestResult = result;
 			}
 		}
 		return (bestResult != null) ? bestResult.build(dstWidth, dstHeight) : null;
+	}
+	
+	public BufferedImage simplify(BufferedImage img, int tolerance) {
+		return Simplifier.get().simplify(img, tolerance, SIMPLE_WIDTH, SIMPLE_HEIGHT);
 	}
 	
 	public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package nsp.client;
 
+import nsp.client.widgets.tools.options.ToShapeOptions;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface IGWTFacadeAsync {
@@ -13,4 +15,7 @@ public interface IGWTFacadeAsync {
 	
 	void mergeImages(String[] layerIds, int[] lefts, int[] tops, int[] rights, int[] bottoms,
 			AsyncCallback<Void> callback);
+	
+	void toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options, AsyncCallback<String> callback);
 }
