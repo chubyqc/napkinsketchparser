@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Comparer implements IComparer {
 	
-	private BufferedImage _model;
+	protected BufferedImage _model;
 	private IShapeBuilder _builder;
 
 	Comparer(IShapeBuilder builder, BufferedImage model) {

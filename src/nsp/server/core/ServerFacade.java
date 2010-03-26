@@ -3,7 +3,6 @@ package nsp.server.core;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
-import java.util.List;
 
 import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.Utils;
@@ -11,6 +10,7 @@ import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
 import nsp.server.recognition.ShapeMatching;
+import nsp.server.recognition.builders.Result;
 
 class ServerFacade implements IServerFacade {
 	
@@ -64,15 +64,18 @@ class ServerFacade implements IServerFacade {
 	@Override
 	public String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, 
 			int bottom, ToShapeOptions options) throws Exception {
+		int width = right - left;
+		int height = bottom - top;
 		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
-		List<BufferedImage> images = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
-			divideImage(left, top, right, bottom, Cropper.Shape.Rectangle);
-		Utils.get().saveImage(images.get(1), getImagePath(srcLayerId));
+		BufferedImage image = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
+			cropImage(left, top, right, bottom, Cropper.Shape.Rectangle);
 		
-		Utils.get().save(ShapeMatching.get().getShape(
-				ShapeMatching.get().simplify(images.get(0), options.getColorTolerance()), right - left, bottom - top),
-				croppedImage);
-		
+		Result result = ShapeMatching.get().getShape(
+				ShapeMatching.get().simplify(image, options.getColorTolerance(), 
+						options.getPixelOnPercentage()), right - left, bottom - top);
+		if (result != null) {
+			Utils.get().saveImage(result.toImage(width, height), croppedImage);
+		}
 		return croppedImage;
 	}
 	

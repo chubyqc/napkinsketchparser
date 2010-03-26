@@ -1,7 +1,5 @@
 package nsp.server.recognition;
 
-import java.awt.Shape;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -9,6 +7,7 @@ import java.util.LinkedList;
 import nsp.server.Utils;
 import nsp.server.image.Simplifier;
 import nsp.server.recognition.builders.Circle;
+import nsp.server.recognition.builders.Connector;
 import nsp.server.recognition.builders.IShapeBuilder;
 import nsp.server.recognition.builders.Line;
 import nsp.server.recognition.builders.Rectangle;
@@ -30,9 +29,11 @@ public class ShapeMatching {
 		_shapes.add(new Rectangle());
 		_shapes.add(new Circle());
 		_shapes.add(new Line());
+		_shapes.add(new Connector());
 	}
 	
-	public Shape getShape(BufferedImage img, int dstWidth, int dstHeight) {
+	public Result getShape(BufferedImage img, int dstWidth, int dstHeight) {
+System.err.println("getShape()");
 		Result bestResult = null;
 		for (IShapeBuilder shape : _shapes) {
 			Result result = shape.getComparer().compare(img);
@@ -41,11 +42,14 @@ public class ShapeMatching {
 				bestResult = result;
 			}
 		}
-		return (bestResult != null) ? bestResult.build(dstWidth, dstHeight) : null;
+		if (bestResult != null) {
+			bestResult.build(dstWidth, dstHeight);
+		}
+		return bestResult;
 	}
 	
-	public BufferedImage simplify(BufferedImage img, int tolerance) {
-		return Simplifier.get().simplify(img, tolerance, SIMPLE_WIDTH, SIMPLE_HEIGHT);
+	public BufferedImage simplify(BufferedImage img, int tolerance, double pixelOnTolerance) {
+		return Simplifier.get().simplify(img, tolerance, pixelOnTolerance, SIMPLE_WIDTH, SIMPLE_HEIGHT);
 	}
 	
 	public static void main(String[] args) {
@@ -54,10 +58,6 @@ public class ShapeMatching {
 		BufferedImage circle = Utils.get().loadImage("/home/chubyqc/handDrawnCircle.png");
 		System.out.println(get().getShape(circle, 10, 10));
 		BufferedImage line = Utils.get().loadImage("/home/chubyqc/handDrawnLine.png");
-		Line2D lineShape = (Line2D)get().getShape(line, 10, 10);
-		System.out.print(lineShape);
-		if (lineShape != null) {
-			System.out.println(lineShape.getP1() + " : " + lineShape.getP2());
-		}
+		get().getShape(line, 10, 10);
 	}
 }

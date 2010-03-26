@@ -22,6 +22,7 @@ public abstract class AbstractTool extends AbstractWidget {
 	
 	private static final String SHOW = "+";
 	private static final String HIDE = "-";
+	private static final String STYLE_TOGGLER = "optionToggler";
 	
 	private ButtonBase _button;
 	private DrawingCanvas _canvas;
@@ -87,6 +88,7 @@ public abstract class AbstractTool extends AbstractWidget {
 	
 	private Widget createOptionsToggler(final Widget optionsPanel) {
 		final Label toggler = new Label(SHOW);
+		toggler.addStyleName(STYLE_TOGGLER);
 		toggler.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

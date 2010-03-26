@@ -1,8 +1,5 @@
 package nsp.server;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -116,16 +113,6 @@ public class Utils {
 			File outputFile = new File(sFile);
 			ImageIO.write(image, "png", outputFile);
 		}catch(IOException e){
-		}
-	}
-	
-	public void save(Shape shape, String filePath) {
-		if (shape != null) {
-			BufferedImage img = newImage(shape.getBounds().width + 1, shape.getBounds().height + 1);
-			Graphics2D g = img.createGraphics();
-			g.setColor(Color.BLACK);
-			g.draw(shape);
-			saveImage(img, filePath);
 		}
 	}
 	

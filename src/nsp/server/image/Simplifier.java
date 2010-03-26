@@ -12,7 +12,6 @@ public class Simplifier {
 	
 	private static final int PIXEL_ON = 0xff000000;
 	private static final int PIXEL_OFF = 0xffffffff;
-	private static final double PIXEL_ONPERCENTAGE = .1;
 	
 	private Simplifier() {}
 	
@@ -31,6 +30,7 @@ public class Simplifier {
 				simplified.setRGB(j, i, getSimplifiedPixel(buffer, tolerance, pixelOnPercentage));
 			}
 		}
+Utils.get().saveImage(complex, "/home/chubyqc/complex.png");
 Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 		return simplified;
 	}
@@ -39,8 +39,8 @@ Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 		return pixel == PIXEL_ON;
 	}
 	
-	public BufferedImage simplify(BufferedImage complex, int tolerance, int newWidth, int newHeight) {
-		return simplify(complex, tolerance, newWidth, newHeight, PIXEL_ONPERCENTAGE);
+	public BufferedImage simplify(BufferedImage complex, int tolerance, double pixelOnPercentage, int newWidth, int newHeight) {
+		return simplify(complex, tolerance, newWidth, newHeight, pixelOnPercentage);
 	}
 	
 	private int getSimplifiedPixel(int[] complexPixel, int tolerance, double pixelOnPercentage) {
@@ -70,7 +70,7 @@ Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 	
 	public static void main(String[] args) {
 		BufferedImage complex = Utils.get().loadImage("/home/chubyqc/complex.png");
-		BufferedImage simple = get().simplify(complex, 225, 10, 10);
+		BufferedImage simple = get().simplify(complex, 225, .1, 10, 10);
 		Utils.get().saveImage(simple, "/home/chubyqc/simple.png");
 		
 		BufferedImage secondSimple = Utils.get().loadImage("/home/chubyqc/secondSimple.png");

@@ -28,22 +28,60 @@ class LineComparer implements IComparer {
 		} else {
 			x1 = x0y0[0]; y1 = x0y0[1]; x0 = x1y1[0]; y0 = x1y1[1];
 		}
-		
-		double slope = (double)(y1 - y0) / (x1 - x0);
-		
+
 		int pixelOnCount = 0;
-		
-		for (int i = x0; i < x1; ++i) {
+		int iteCount;
+		if (y1 - y0 == 0) {
+			pixelOnCount = getHorizontalLinePixelOnCount(shape, x0, x1, y0);
+			iteCount = x1 - x0;
+		} else if (x1 - x0 == 0) {
+			pixelOnCount = getVerticalLinePixelOnCount(shape, x0, y0, y1);
+			iteCount = Math.abs(y1 - y0);
+		} else {
+			pixelOnCount = getSlopePixelOnCount(shape, x0, y0, x1, y1);
+			iteCount = Math.abs(y1 - y0);
+		}
+		++iteCount;
+
+		return new LineResult(_builder, (iteCount == 0) ? 0 : (double)pixelOnCount / iteCount,
+				width, height, x0, y0, x1, y1);
+	}
+	
+	private int getHorizontalLinePixelOnCount(BufferedImage shape, int x0, int x1, int y0) {
+		int pixelOnCount = 0;
+		int min = Math.min(x0, x1);
+		int max = Math.max(x0, x1);
+		for (int i = min; i <= max; ++i) {
+			if (Simplifier.get().isPixelOn(shape.getRGB(i, y0))) {
+				++pixelOnCount;
+			}
+		}
+		return pixelOnCount;
+	}
+	
+	private int getVerticalLinePixelOnCount(BufferedImage shape, int x0, int y0, int y1) {
+		int pixelOnCount = 0;
+		int min = Math.min(y0, y1);
+		int max = Math.max(y0, y1);
+		for (int i = min; i <= max; ++i) {
+			if (Simplifier.get().isPixelOn(shape.getRGB(x0, i))) {
+				++pixelOnCount;
+			}
+		}
+		return pixelOnCount;
+	}
+	
+	private int getSlopePixelOnCount(BufferedImage shape, int x0, int y0, int x1, int y1) {
+		double slope = (double)(y1 - y0) / (x1 - x0);
+		int pixelOnCount = 0;
+		for (int i = x0; i <= x1; ++i) {
 			if (Simplifier.get().isPixelOn(shape.getRGB(
 					i, 
 					(int)((i - x0) * slope) + y0))) {
 				++pixelOnCount;
 			}
 		}
-
-		int ys = Math.abs(y1 - y0);
-		return new LineResult(_builder, (ys == 0) ? 0 : (double)pixelOnCount / ys,
-				width, height, x0, y0, x1, y1);
+		return pixelOnCount;
 	}
 	
 	private int[] getX1Y1(int width, int height, int[] row, BufferedImage shape) {

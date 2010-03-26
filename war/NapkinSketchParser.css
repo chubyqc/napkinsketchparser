@@ -16,3 +16,7 @@
 .imageSelected {
 	border: 1px dashed black;
 }
+
+.optionToggler {
+	cursor: pointer;
+}
