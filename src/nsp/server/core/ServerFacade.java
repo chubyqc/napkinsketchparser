@@ -4,11 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
 
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.Utils;
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
+import nsp.server.recognition.ShapeFinder;
 import nsp.server.recognition.ShapeMatching;
 import nsp.server.recognition.builders.Result;
 
@@ -100,6 +102,13 @@ class ServerFacade implements IServerFacade {
 		if (layerIds.length > 0) {
 			Utils.get().saveImage(fusion.getImage(), getImagePath(layerIds[0]));
 		}
+	}
+
+	@Override
+	public Rectangle findShape(String layerId, int left, int top, int right,
+			int bottom) throws Exception {
+		return ShapeFinder.get().find(Utils.get().loadImage(getImagePath(layerId)), left,
+				top, right, bottom);
 	}
 	
 	private File getImagePathFile(String layerId) {

@@ -2,6 +2,7 @@ package nsp.client.widgets.tools;
 
 import java.util.Map.Entry;
 
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
 import nsp.client.widgets.canvas.DrawingCanvas;
 import nsp.client.widgets.tools.options.Options;
@@ -43,6 +44,14 @@ public abstract class AbstractTool extends AbstractWidget {
 	
 	public AbstractTool() {
 		this(null);
+	}
+	
+	protected void withSelectionBounds(final IWithBounds callback) {
+		final Rectangle bounds = getCanvas().getSelectionBounds();
+		if (bounds.getMinX() < bounds.getMaxX() &&
+				bounds.getMinY() < bounds.getMaxY()) {
+			callback.execute(bounds);
+		}
 	}
 	
 	private void createOptionsPanel() {

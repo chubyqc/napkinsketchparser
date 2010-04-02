@@ -1,5 +1,6 @@
 package nsp.client;
 
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -20,4 +21,6 @@ public interface IGWTFacade extends RemoteService {
 	
 	String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
 			ToShapeOptions options) throws NSPException;
+
+	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws NSPException;
 }

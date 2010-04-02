@@ -187,4 +187,11 @@ public class DrawingCanvas extends AbstractWidget {
 			}
 		});
 	}
+
+	public void setSelectionBounds(Rectangle result) {
+		Point pos = getImagePosition();
+		setBorderPosition(pos.getX() + result.getMinX(), pos.getY() + result.getMinY());
+		_border.setSize(Math.max(0, result.getWidth()), 
+				Math.max(0, result.getHeight()));
+	}
 }

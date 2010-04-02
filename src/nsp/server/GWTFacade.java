@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import nsp.client.IGWTFacade;
 import nsp.client.NSPException;
+import nsp.client.geom.Rectangle;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.core.IServerFacade;
 import nsp.server.core.SessionManager;
@@ -64,6 +65,16 @@ public class GWTFacade extends RemoteServiceServlet implements
 			int[] bottoms) throws NSPException {
 		try {
 			getFacade().mergeImage(layerIds, lefts, tops, rights, bottoms);
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+
+	@Override
+	public Rectangle findShape(String layerId, int left, int top, int right,
+			int bottom) throws NSPException {
+		try {
+			return getFacade().findShape(layerId, left, top, right, bottom);
 		} catch (Exception e) {
 			throw new NSPException();
 		}

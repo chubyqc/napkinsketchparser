@@ -30,13 +30,17 @@ public class Simplifier {
 				simplified.setRGB(j, i, getSimplifiedPixel(buffer, tolerance, pixelOnPercentage));
 			}
 		}
-Utils.get().saveImage(complex, "/home/chubyqc/complex.png");
-Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 		return simplified;
 	}
 	
 	public boolean isPixelOn(int pixel) {
 		return pixel == PIXEL_ON;
+	}
+	
+	public boolean isPixelOn(int pixel, int tolerance) {
+		return getRedComponent(pixel) <= tolerance ||
+			getGreenComponent(pixel) <= tolerance ||
+			getBlueComponent(pixel) <= tolerance;
 	}
 	
 	public BufferedImage simplify(BufferedImage complex, int tolerance, double pixelOnPercentage, int newWidth, int newHeight) {
@@ -47,9 +51,7 @@ Utils.get().saveImage(simplified, "/home/chubyqc/simplified.png");
 		int pixelOnCount = 0;
 		for (int i = 0; i < complexPixel.length; ++i) {
 			int pixel = complexPixel[i];
-			if (getRedComponent(pixel) <= tolerance ||
-					getGreenComponent(pixel) <= tolerance ||
-					getBlueComponent(pixel) <= tolerance) {
+			if (isPixelOn(pixel, tolerance)) {
 				++pixelOnCount;
 			}
 		}

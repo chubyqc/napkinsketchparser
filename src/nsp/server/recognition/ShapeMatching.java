@@ -33,11 +33,9 @@ public class ShapeMatching {
 	}
 	
 	public Result getShape(BufferedImage img, int dstWidth, int dstHeight) {
-System.err.println("getShape()");
 		Result bestResult = null;
 		for (IShapeBuilder shape : _shapes) {
 			Result result = shape.getComparer().compare(img);
-			System.err.println(result.getScore());
 			if (bestResult == null || result.getScore() > bestResult.getScore()) {
 				bestResult = result;
 			}
