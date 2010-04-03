@@ -110,6 +110,13 @@ class ServerFacade implements IServerFacade {
 		return ShapeFinder.get().find(Utils.get().loadImage(getImagePath(layerId)), left,
 				top, right, bottom);
 	}
+
+	@Override
+	public Rectangle[] findAllShape(String layerId, int left, int top,
+			int right, int bottom) throws Exception {
+		return ShapeFinder.get().findAll(Utils.get().loadImage(getImagePath(layerId)), 
+				left, top, right, bottom);
+	}
 	
 	private File getImagePathFile(String layerId) {
 		return new File(getImagesPath(), layerId);

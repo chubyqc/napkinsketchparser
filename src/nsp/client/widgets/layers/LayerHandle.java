@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import nsp.client.Styles;
 import nsp.client.widgets.AbstractWidget;
 
 public class LayerHandle extends AbstractWidget {
@@ -16,7 +17,6 @@ public class LayerHandle extends AbstractWidget {
 	private static final String BTN_MOVEUP = "/\\";
 	private static final String BTN_MOVEDOWN = "\\/";
 	private static final String BTN_DELETE = "X";
-	private static final String STYLE_SELECTED = "selectedLayerHandle";
 	private static final String STYLE_ITEM = "layerHandle";
 	
 	private HorizontalPanel _container;
@@ -78,12 +78,12 @@ public class LayerHandle extends AbstractWidget {
 	}
 	
 	void unselected() {
-		_container.removeStyleName(STYLE_SELECTED);
+		_container.removeStyleName(Styles.get().getSelectedHandle());
 		_registration = _label.addClickHandler(_handler);
 	}
 	
 	void selected(boolean append) {
-		_container.addStyleName(STYLE_SELECTED);
+		_container.addStyleName(Styles.get().getSelectedHandle());
 		if (!append) {
 			_registration.removeHandler();
 			_registration = null;

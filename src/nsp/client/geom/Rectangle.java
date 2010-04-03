@@ -35,6 +35,10 @@ public class Rectangle implements Serializable {
 		_maxy = Math.max(_maxy, y);
 	}
 	
+	public boolean isValid() {
+		return _width > 0 && _height > 0;
+	}
+	
 	public void computeSize() {
 		_width = _maxx - _minx;
 		_height = _maxy - _miny;

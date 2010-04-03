@@ -2,6 +2,8 @@ package nsp.server.recognition;
 
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import nsp.client.geom.Point;
@@ -28,6 +30,34 @@ public class ShapeFinder {
 		}
 		result.computeSize();
 		return result;
+	}
+
+	public Rectangle[] findAll(BufferedImage img, int minX, int minY,
+			int maxX, int maxY) {
+		List<Rectangle> rectangles = new LinkedList<Rectangle>();
+		int toExploreMinX = minX;
+		int toExploreMinY = minY;
+		int toExploreMaxY = maxY;
+		Rectangle rectangle = null;
+		boolean doNextLine = true;
+		do {
+			rectangle = find(img, toExploreMinX, toExploreMinY, maxX, toExploreMaxY);
+			if (rectangle.isValid()) {
+				rectangles.add(rectangle);
+				if (rectangle.getMaxX() != maxX) {
+					doNextLine = false;
+					toExploreMinX = rectangle.getMaxX() + 1;
+					toExploreMaxY = rectangle.getMaxY();
+				}
+			} 
+			if (doNextLine) {
+				toExploreMinX = minX;
+				toExploreMinY = toExploreMaxY + 1;
+				toExploreMaxY = maxY;
+			}
+			doNextLine = true;
+		} while (toExploreMinY < toExploreMaxY);
+		return rectangles.toArray(new Rectangle[rectangles.size()]);
 	}
 
 	private void inspect(final BufferedImage img, final Set<Point> inspected, final Rectangle result, 

@@ -2,9 +2,9 @@ package nsp.client;
 
 import nsp.client.widgets.UploadForm;
 import nsp.client.widgets.canvas.DrawingCanvas;
-import nsp.client.widgets.layers.ImagesManager;
 import nsp.client.widgets.tools.Copy;
 import nsp.client.widgets.tools.Cut;
+import nsp.client.widgets.tools.FindAllShapes;
 import nsp.client.widgets.tools.FindShape;
 import nsp.client.widgets.tools.Merge;
 import nsp.client.widgets.tools.Move;
@@ -24,9 +24,7 @@ public class NapkinSketchParser implements EntryPoint {
 	private DrawingCanvas _canvas;
 	
 	public void onModuleLoad() {
-		ImagesManager _imagesManager = new ImagesManager();
-		_imagesManager.appendTo(RootPanel.get());
-		_canvas = new DrawingCanvas(1000, 1000, _imagesManager);
+		_canvas = new DrawingCanvas(1000, 1000, RootPanel.get());
 		createToolbar();
 		_canvas.appendTo(RootPanel.get());
 		
@@ -45,6 +43,7 @@ public class NapkinSketchParser implements EntryPoint {
 		toolbar.addTool(new Cut(move));
 		toolbar.addTool(new ToShape(move));
 		toolbar.addTool(new FindShape());
+		toolbar.addTool(new FindAllShapes());
 		toolbar.addTool(move);
 		
 		SelectLayer selectLayer = new SelectLayer();

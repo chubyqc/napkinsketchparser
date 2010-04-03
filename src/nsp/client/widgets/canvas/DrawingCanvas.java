@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import nsp.client.Styles;
 import nsp.client.geom.Point;
 import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
@@ -13,6 +14,8 @@ import nsp.client.widgets.canvas.modes.Select;
 import nsp.client.widgets.canvas.modes.SelectLayer;
 import nsp.client.widgets.layers.ImageContainer;
 import nsp.client.widgets.layers.ImagesManager;
+import nsp.client.widgets.selection.SelectionBorder;
+import nsp.client.widgets.selection.SelectionsManager;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -23,6 +26,8 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DrawingCanvas extends AbstractWidget {
@@ -38,13 +43,21 @@ public class DrawingCanvas extends AbstractWidget {
 	private AbstractMode _selectLayerMode;
 	
 	private ImagesManager _imagesManager;
+	private SelectionsManager _selectionsManager;
 	
-	public DrawingCanvas(int width, int height,
-			ImagesManager imagesManager) {
+	public DrawingCanvas(int width, int height, RootPanel root) {
 		_canvas = new AbsolutePanel();
 		_focusPanel = new FocusPanel(_canvas);
-		_imagesManager = imagesManager;
+		_imagesManager = new ImagesManager();
+		_selectionsManager = new SelectionsManager(this);
 		_canvas.setPixelSize(width, height);
+
+		VerticalPanel panel = new VerticalPanel();
+		panel.addStyleName(Styles.get().getLists());
+		_imagesManager.appendTo(panel);
+		_selectionsManager.appendTo(panel);
+		root.add(panel);
+		
 		setSelectionBorder(new SelectionBorder(this));
 		addMouseListeners();
 		initModes();
@@ -193,5 +206,15 @@ public class DrawingCanvas extends AbstractWidget {
 		setBorderPosition(pos.getX() + result.getMinX(), pos.getY() + result.getMinY());
 		_border.setSize(Math.max(0, result.getWidth()), 
 				Math.max(0, result.getHeight()));
+	}
+
+	public void setSelectionBounds(Rectangle[] result) {
+		_selectionsManager.clear();
+		if (result.length > 0) {
+			setSelectionBounds(result[0]);
+			for (int i = 0; i < result.length; ++i) {
+				_selectionsManager.add(result[i]);
+			}
+		}
 	}
 }

@@ -1,7 +1,7 @@
 package nsp.client.widgets.canvas.modes;
 
 import nsp.client.widgets.canvas.DrawingCanvas;
-import nsp.client.widgets.canvas.SelectionBorder;
+import nsp.client.widgets.selection.SelectionBorder;
 
 public abstract class AbstractMode {
 	

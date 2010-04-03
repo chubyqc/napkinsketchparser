@@ -6,7 +6,23 @@ public class Styles {
 		return _instance;
 	}
 	
+	public String getLists() {
+		return "lists";
+	}
+	
 	public String getLayerList() {
 		return "layerList";
+	}
+	
+	public String getSelectionList() {
+		return "selectionList";
+	}
+	
+	public String getSelectionHandle() {
+		return "selectionHandle";
+	}
+	
+	public String getSelectedHandle() {
+		return "selectedHandle";
 	}
 }

@@ -21,4 +21,7 @@ public interface IServerFacade {
 	void mergeImage(String[] layerIds, int[] lefts, int[] tops, int[] rights, int[] bottoms) throws Exception;
 
 	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws Exception;
+
+	Rectangle[] findAllShape(String layerId, int minX, int minY, int maxX,
+			int maxY) throws Exception;
 }

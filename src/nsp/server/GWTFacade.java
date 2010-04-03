@@ -79,6 +79,16 @@ public class GWTFacade extends RemoteServiceServlet implements
 			throw new NSPException();
 		}
 	}
+
+	@Override
+	public Rectangle[] findAllShapes(String layerId, int minX, int minY,
+			int maxX, int maxY) throws NSPException {
+		try {
+			return getFacade().findAllShape(layerId, minX, minY, maxX, maxY);
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
 	
 	private String toRelativePath(String absolutePath) {
 		HttpServletRequest req = getRequest();

@@ -23,4 +23,7 @@ public interface IGWTFacade extends RemoteService {
 			ToShapeOptions options) throws NSPException;
 
 	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws NSPException;
+
+	Rectangle[] findAllShapes(String layerId, int minX, int minY, int maxX,
+			int maxY) throws NSPException;
 }

@@ -1,6 +1,7 @@
-package nsp.client.widgets.canvas;
+package nsp.client.widgets.selection;
 
 import nsp.client.widgets.AbstractWidget;
+import nsp.client.widgets.canvas.DrawingCanvas;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -21,11 +22,11 @@ public class SelectionBorder extends AbstractWidget {
 		_border.setPixelSize(width, height);
 	}
 	
-	void hide() {
+	public void hide() {
 		_border.setVisible(false);
 	}
 	
-	void show() {
+	public void show() {
 		_border.setVisible(true);
 	}
 

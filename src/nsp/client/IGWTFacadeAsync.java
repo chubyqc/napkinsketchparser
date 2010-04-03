@@ -22,4 +22,7 @@ public interface IGWTFacadeAsync {
 
 	void findShape(String layerId, int left, int top, int right, int bottom,
 			AsyncCallback<Rectangle> callback);
+
+	void findAllShapes(String layerId, int minX, int minY, int maxX, int maxY,
+			AsyncCallback<Rectangle[]> asyncCallback);
 }

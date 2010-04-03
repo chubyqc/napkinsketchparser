@@ -1,5 +1,13 @@
-.layerList {
+.lists {
 	float: right;
+}
+
+.layerList {
+	border: 1px solid black;
+	width: 200px;
+}
+
+.selectionList {
 	border: 1px solid black;
 	width: 200px;
 }
@@ -8,9 +16,13 @@
 	width: 100%;
 }
 
-.selectedLayerHandle {
+.selectionHandle {
+	width: 100%;
+}
+
+.selectedHandle {
 	color: white;
-	background: black;
+	background-color: black;
 }
 
 .imageSelected {
