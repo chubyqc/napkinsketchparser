@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import nsp.client.geom.Point;
@@ -16,17 +17,19 @@ public class ShapeFinder {
 		return _instance;
 	}
 	
-	private static final int TOLERANCE = 140;
+	private static final int TOLERANCE = 254;
 	
 	private ShapeFinder() {}
 	
 	public Rectangle find(BufferedImage img, int minX, int minY, int maxX, int maxY) {
 		Set<Point> inspected = new HashSet<Point>();
+		Queue<Point> toInspect = new LinkedList<Point>();
 		Rectangle result = new Rectangle(minX, minY, 0, 0);
 		Point first = findFirstPixelOn(img, inspected, minX, minY, maxX, maxY);
 		if (first != null) {
 			result.reset(first.getX(), first.getY());
-			inspect(img, inspected, result, first, minX, minY, maxX, maxY);
+			toInspect.add(first);
+			inspect(img, inspected, toInspect, result, minX, minY, maxX, maxY);
 		}
 		result.computeSize();
 		return result;
@@ -60,20 +63,22 @@ public class ShapeFinder {
 		return rectangles.toArray(new Rectangle[rectangles.size()]);
 	}
 
-	private void inspect(final BufferedImage img, final Set<Point> inspected, final Rectangle result, 
-			Point pixel, final int minX, final int minY, final int maxX, final int maxY) {
-		if (!inspected.contains(pixel)) {
-			inspected.add(pixel);
-			int x = pixel.getX();
-			int y = pixel.getY();
-			if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-				if (Simplifier.get().isPixelOn(img.getRGB(x, y), TOLERANCE)) {
-					result.extend(x, y);
-					int startX = x - 1, startY = y - 1, endX = x + 1, endY = y + 1;
-					for (int i = startY; i <= endY; ++i) {
-						for (int j = startX; j <= endX; ++j) {
-							inspect(img, inspected, result, new Point(j, i), 
-									minX, minY, maxX, maxY);
+	private void inspect(BufferedImage img, Set<Point> inspected, Queue<Point> toInspect,
+			Rectangle result, int minX, int minY, int maxX, int maxY) {
+		Point pixel;
+		while ((pixel = toInspect.poll()) != null) {
+			if (!inspected.contains(pixel)) {
+				inspected.add(pixel);
+				int x = pixel.getX();
+				int y = pixel.getY();
+				if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
+					if (Simplifier.get().isPixelOn(img.getRGB(x, y), TOLERANCE)) {
+						result.extend(x, y);
+						int startX = x - 1, startY = y - 1, endX = x + 1, endY = y + 1;
+						for (int i = startY; i <= endY; ++i) {
+							for (int j = startX; j <= endX; ++j) {
+								toInspect.add(new Point(j, i));
+							}
 						}
 					}
 				}
