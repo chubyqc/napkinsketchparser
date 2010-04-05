@@ -3,7 +3,7 @@ package nsp.client.widgets.tools.options;
 public class ToShapeOptions extends Options {
 
 	private static final long serialVersionUID = 1L;
-	private static final String COLOR_TOLERANCE = "Color tolerance";
+	static final String COLOR_TOLERANCE = "Color tolerance";
 	private static final String PIXELON_TOLERANCE = "PixelOn percentage";
 
 	public ToShapeOptions() {

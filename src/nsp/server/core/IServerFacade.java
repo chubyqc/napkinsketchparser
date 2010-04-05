@@ -3,6 +3,7 @@ package nsp.server.core;
 import java.io.InputStream;
 
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.FindShapeOptions;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 
 public interface IServerFacade {
@@ -23,5 +24,5 @@ public interface IServerFacade {
 	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws Exception;
 
 	Rectangle[] findAllShape(String layerId, int minX, int minY, int maxX,
-			int maxY) throws Exception;
+			int maxY, FindShapeOptions options) throws Exception;
 }

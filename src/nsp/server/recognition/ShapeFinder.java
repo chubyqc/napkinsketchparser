@@ -17,26 +17,27 @@ public class ShapeFinder {
 		return _instance;
 	}
 	
-	private static final int TOLERANCE = 254;
+	private static final int PIXEL_MIN = 10;
 	
 	private ShapeFinder() {}
 	
-	public Rectangle find(BufferedImage img, int minX, int minY, int maxX, int maxY) {
+	public Rectangle find(BufferedImage img, int minX, int minY, int maxX, int maxY,
+			int tolerance) {
 		Set<Point> inspected = new HashSet<Point>();
 		Queue<Point> toInspect = new LinkedList<Point>();
 		Rectangle result = new Rectangle(minX, minY, 0, 0);
-		Point first = findFirstPixelOn(img, inspected, minX, minY, maxX, maxY);
+		Point first = findFirstPixelOn(img, inspected, minX, minY, maxX, maxY, tolerance);
 		if (first != null) {
 			result.reset(first.getX(), first.getY());
 			toInspect.add(first);
-			inspect(img, inspected, toInspect, result, minX, minY, maxX, maxY);
+			inspect(img, inspected, toInspect, result, minX, minY, maxX, maxY, tolerance);
 		}
 		result.computeSize();
 		return result;
 	}
 
 	public Rectangle[] findAll(BufferedImage img, int minX, int minY,
-			int maxX, int maxY) {
+			int maxX, int maxY, int tolerance) {
 		List<Rectangle> rectangles = new LinkedList<Rectangle>();
 		int toExploreMinX = minX;
 		int toExploreMinY = minY;
@@ -44,13 +45,15 @@ public class ShapeFinder {
 		Rectangle rectangle = null;
 		boolean doNextLine = true;
 		do {
-			rectangle = find(img, toExploreMinX, toExploreMinY, maxX, toExploreMaxY);
+			rectangle = find(img, toExploreMinX, toExploreMinY, maxX, toExploreMaxY, tolerance);
 			if (rectangle.isValid()) {
 				rectangles.add(rectangle);
 				if (rectangle.getMaxX() != maxX) {
 					doNextLine = false;
 					toExploreMinX = rectangle.getMaxX() + 1;
-					toExploreMaxY = rectangle.getMaxY();
+					toExploreMaxY = (toExploreMaxY == maxY) ? 
+							rectangle.getMaxY() :
+							Math.max(toExploreMaxY, rectangle.getMaxY());
 				}
 			} 
 			if (doNextLine) {
@@ -59,21 +62,27 @@ public class ShapeFinder {
 				toExploreMaxY = maxY;
 			}
 			doNextLine = true;
-		} while (toExploreMinY < toExploreMaxY);
+		} while (toExploreMinY < maxY);
 		return rectangles.toArray(new Rectangle[rectangles.size()]);
 	}
 
 	private void inspect(BufferedImage img, Set<Point> inspected, Queue<Point> toInspect,
-			Rectangle result, int minX, int minY, int maxX, int maxY) {
+			Rectangle result, int minX, int minY, int maxX, int maxY, int tolerance) {
 		Point pixel;
+		int pixelOnCount = 1;
 		while ((pixel = toInspect.poll()) != null) {
 			if (!inspected.contains(pixel)) {
 				inspected.add(pixel);
 				int x = pixel.getX();
 				int y = pixel.getY();
 				if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-					if (Simplifier.get().isPixelOn(img.getRGB(x, y), TOLERANCE)) {
+					boolean continueInspect = false;
+					if (Simplifier.get().isPixelOn(img.getRGB(x, y), tolerance)) {
 						result.extend(x, y);
+						++pixelOnCount;
+						continueInspect = true;
+					}
+					if (continueInspect || pixelOnCount < PIXEL_MIN) {
 						int startX = x - 1, startY = y - 1, endX = x + 1, endY = y + 1;
 						for (int i = startY; i <= endY; ++i) {
 							for (int j = startX; j <= endX; ++j) {
@@ -87,15 +96,32 @@ public class ShapeFinder {
 	}
 	
 	private Point findFirstPixelOn(BufferedImage img, Set<Point> inspected, 
-			int minX, int minY, int maxX, int maxY) {
-		for (int i = minY; i <= maxY; ++i) {
-			for (int j = minX; j <= maxX; ++j) {
-				if (Simplifier.get().isPixelOn(img.getRGB(j, i), TOLERANCE)) {
-					return new Point(j, i);
-				} else {
-					inspected.add(new Point(j, i));
+			int minX, int minY, int maxX, int maxY, int tolerance) {
+		int localMaxX = minX;
+		int localMaxY = minY;
+		while (localMaxX <= maxX || localMaxY <= maxY) {
+			if (localMaxX <= maxX) {
+				int currentMaxY = Math.min(maxY, localMaxY);
+				for (int i = minY; i <= currentMaxY; ++i) {
+					if (Simplifier.get().isPixelOn(img.getRGB(localMaxX, i), tolerance)) {
+						return new Point(localMaxX, i);
+					} else {
+						inspected.add(new Point(localMaxX, i));
+					}
 				}
 			}
+			if (localMaxY <= maxY) {
+				int currentMaxX = Math.min(maxX, localMaxX);
+				for (int i = minX; i <= currentMaxX; ++i) {
+					if (Simplifier.get().isPixelOn(img.getRGB(i, localMaxY), tolerance)) {
+						return new Point(i, localMaxY);
+					} else {
+						inspected.add(new Point(i, localMaxY));
+					}
+				}
+			}
+			++localMaxX;
+			++localMaxY;
 		}
 		return null;
 	}

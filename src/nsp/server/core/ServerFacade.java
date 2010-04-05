@@ -3,8 +3,10 @@ package nsp.server.core;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.FindShapeOptions;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.Utils;
 import nsp.server.core.config.Config;
@@ -57,9 +59,11 @@ class ServerFacade implements IServerFacade {
 	@Override
 	public String cutImage(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom) throws Exception {
 		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
-		BufferedImage image = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
-			cropImage(left, top, right, bottom, Cropper.Shape.Rectangle);
-		Utils.get().saveImage(image, croppedImage);
+		String srcPath = getImagePath(srcLayerId);
+		List<BufferedImage> images = new Cropper(Utils.get().loadImage(srcPath)).
+			divideImage(left, top, right, bottom, Cropper.Shape.Rectangle);
+		Utils.get().saveImage(images.get(0), croppedImage);
+		Utils.get().saveImage(images.get(1), srcPath);
 		return croppedImage;
 	}
 	
@@ -108,14 +112,14 @@ class ServerFacade implements IServerFacade {
 	public Rectangle findShape(String layerId, int left, int top, int right,
 			int bottom) throws Exception {
 		return ShapeFinder.get().find(Utils.get().loadImage(getImagePath(layerId)), left,
-				top, right, bottom);
+				top, right, bottom, 140);
 	}
 
 	@Override
 	public Rectangle[] findAllShape(String layerId, int left, int top,
-			int right, int bottom) throws Exception {
+			int right, int bottom, FindShapeOptions options) throws Exception {
 		return ShapeFinder.get().findAll(Utils.get().loadImage(getImagePath(layerId)), 
-				left, top, right, bottom);
+				left, top, right, bottom, options.getColorTolerance());
 	}
 	
 	private File getImagePathFile(String layerId) {

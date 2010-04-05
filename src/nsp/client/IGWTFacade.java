@@ -1,6 +1,7 @@
 package nsp.client;
 
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.FindShapeOptions;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -25,5 +26,5 @@ public interface IGWTFacade extends RemoteService {
 	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws NSPException;
 
 	Rectangle[] findAllShapes(String layerId, int minX, int minY, int maxX,
-			int maxY) throws NSPException;
+			int maxY, FindShapeOptions findShapeOptions) throws NSPException;
 }

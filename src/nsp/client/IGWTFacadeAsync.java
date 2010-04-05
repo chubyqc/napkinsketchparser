@@ -1,6 +1,7 @@
 package nsp.client;
 
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.FindShapeOptions;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,5 +25,5 @@ public interface IGWTFacadeAsync {
 			AsyncCallback<Rectangle> callback);
 
 	void findAllShapes(String layerId, int minX, int minY, int maxX, int maxY,
-			AsyncCallback<Rectangle[]> asyncCallback);
+			FindShapeOptions findShapeOptions, AsyncCallback<Rectangle[]> asyncCallback);
 }

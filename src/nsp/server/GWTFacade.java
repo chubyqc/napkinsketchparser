@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import nsp.client.IGWTFacade;
 import nsp.client.NSPException;
 import nsp.client.geom.Rectangle;
+import nsp.client.widgets.tools.options.FindShapeOptions;
 import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.core.IServerFacade;
 import nsp.server.core.SessionManager;
@@ -82,9 +83,9 @@ public class GWTFacade extends RemoteServiceServlet implements
 
 	@Override
 	public Rectangle[] findAllShapes(String layerId, int minX, int minY,
-			int maxX, int maxY) throws NSPException {
+			int maxX, int maxY, FindShapeOptions options) throws NSPException {
 		try {
-			return getFacade().findAllShape(layerId, minX, minY, maxX, maxY);
+			return getFacade().findAllShape(layerId, minX, minY, maxX, maxY, options);
 		} catch (Exception e) {
 			throw new NSPException();
 		}
