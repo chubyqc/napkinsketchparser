@@ -11,21 +11,35 @@ public class Rectangle implements Serializable {
 	private int _maxy;
 	private int _height;
 	private int _width;
+	private String _url;
 	
 	public Rectangle() {}
 	
-	public Rectangle(int minx, int miny, int width, int height) {
+	public Rectangle(int minx, int miny, int width, int height, String url) {
 		_minx = minx;
 		_miny = miny;
 		_maxx = _minx + width - 1;
 		_maxy = _miny + height - 1;
 		_height = height;
 		_width = width;
+		_url = url;
+	}
+	
+	public Rectangle(int minx, int miny, int width, int height) {
+		this(minx, miny, width, height, null);
 	}
 	
 	public void reset(int x, int y) {
 		_minx = _maxx = x;
 		_miny = _maxy = y;
+	}
+	
+	public void setUrl(String url) {
+		_url = url;
+	}
+	
+	public String getUrl() {
+		return _url;
 	}
 	
 	public void extend(int x, int y) {

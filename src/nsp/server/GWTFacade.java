@@ -100,9 +100,32 @@ public class GWTFacade extends RemoteServiceServlet implements
 			throw new NSPException();
 		}
 	}
+
+	@Override
+	public Rectangle[] toText(String srcLayerId, String dstLayerId, int left, int top, int right,
+			int bottom, FindShapeOptions options) throws NSPException {
+		try {
+			return toRelativePaths(getFacade().toText(srcLayerId, dstLayerId, left, 
+					top, right, bottom, options));
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+	
+	private Rectangle[] toRelativePaths(Rectangle[] recs) {
+		HttpServletRequest req = getRequest();
+		for (int i = 0; i < recs.length; ++i) {
+			recs[i].setUrl(toRelativePath(recs[i].getUrl(), req));
+		}
+		return recs;
+	}
 	
 	private String toRelativePath(String absolutePath) {
 		HttpServletRequest req = getRequest();
+		return toRelativePath(absolutePath, req);
+	}
+	
+	private String toRelativePath(String absolutePath, HttpServletRequest req) {
 		return absolutePath.substring(
 				getServletContext().getRealPath(req.getContextPath()).length() - 1);
 	}

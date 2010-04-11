@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import nsp.server.Utils;
+import nsp.server.image.Cropper;
 import nsp.server.image.Simplifier;
 import nsp.server.recognition.builders.Circle;
 import nsp.server.recognition.builders.Connector;
@@ -55,6 +56,20 @@ public class ShapeMatching {
 			bestResult.build(dstWidth, dstHeight);
 		}
 		return bestResult;
+	}
+
+	public BoundedImages getAllShapes(BufferedImage img, int left, int top,
+			int right, int bottom, int colorTolerance) throws Exception {
+		nsp.client.geom.Rectangle[] shapes = ShapeFinder.get().findAll(img, left, top, 
+				right, bottom, colorTolerance);
+		BufferedImage[] results = new BufferedImage[shapes.length]; 
+		Cropper cropper = new Cropper(img);
+		int i = -1;
+		for (nsp.client.geom.Rectangle shape : shapes) {
+			results[++i] = cropper.cropImage(shape.getMinX(), 
+					shape.getMinY(), shape.getMaxX(), shape.getMaxY(), Cropper.Shape.Rectangle);
+		}
+		return new BoundedImages(shapes, results);
 	}
 	
 	public BufferedImage simplify(BufferedImage img, int tolerance, double pixelOnTolerance) {

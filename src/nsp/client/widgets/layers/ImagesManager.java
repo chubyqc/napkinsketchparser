@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import nsp.client.Styles;
+import nsp.client.geom.Point;
 import nsp.client.widgets.AbstractWidget;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,6 +27,8 @@ public class ImagesManager extends AbstractWidget {
 	private Set<LayerHandle> _currentHandles;
 	private int _highestZ;
 	
+	private Point _currentPosition;
+	
 	public ImagesManager() {
 		_images = new HashMap<Widget, ImageContainer>();
 		_currentImages = new HashSet<ImageContainer>();
@@ -33,6 +36,11 @@ public class ImagesManager extends AbstractWidget {
 		_container = new VerticalPanel();
 		_container.setStyleName(Styles.get().getLayerList());
 		_highestZ = BASE_IMAGE_Z;
+		_currentPosition = new Point(0, 0);
+	}
+	
+	public Point getCurrentPosition() {
+		return _currentPosition;
 	}
 	
 	public ImageContainer createImage(String url) {
@@ -51,6 +59,7 @@ public class ImagesManager extends AbstractWidget {
 			image.getHandle().unselected();
 		}
 		_currentImages.clear();
+		_currentPosition.set(0, 0);
 	}
 	
 	public ImageContainer getCurrentImage() {
@@ -74,6 +83,7 @@ public class ImagesManager extends AbstractWidget {
 		handle.selected(append);
 		_currentHandles.add(handle);
 		_currentImages.add(image);
+		_currentPosition.set(image.getLeft(), image.getTop());
 	}
 	
 	boolean moveDown(LayerHandle handle, ImageContainer image) {

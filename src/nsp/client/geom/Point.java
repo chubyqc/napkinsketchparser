@@ -17,6 +17,11 @@ public class Point implements Serializable {
 		_hash = hash(x, y);
 	}
 	
+	public void set(int x, int y) {
+		_x = x;
+		_y = y;
+	}
+	
 	public int getX() {
 		return _x;
 	}

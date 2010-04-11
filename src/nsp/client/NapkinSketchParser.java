@@ -11,6 +11,7 @@ import nsp.client.widgets.tools.Move;
 import nsp.client.widgets.tools.SelectLayer;
 import nsp.client.widgets.tools.ToChar;
 import nsp.client.widgets.tools.ToShape;
+import nsp.client.widgets.tools.ToText;
 import nsp.client.widgets.tools.Toggle;
 import nsp.client.widgets.tools.Toolbar;
 import nsp.client.widgets.tools.Upload;
@@ -44,6 +45,7 @@ public class NapkinSketchParser implements EntryPoint {
 		toolbar.addTool(new Cut(move));
 		toolbar.addTool(new ToShape(move));
 		toolbar.addTool(new ToChar(move));
+		toolbar.addTool(new ToText());
 		toolbar.addTool(new FindShape());
 		toolbar.addTool(new FindAllShapes());
 		toolbar.addTool(move);

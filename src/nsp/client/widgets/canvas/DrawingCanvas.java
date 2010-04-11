@@ -45,6 +45,9 @@ public class DrawingCanvas extends AbstractWidget {
 	private ImagesManager _imagesManager;
 	private SelectionsManager _selectionsManager;
 	
+	private int _currentX;
+	private int _currentY;
+	
 	public DrawingCanvas(int width, int height, RootPanel root) {
 		_canvas = new AbsolutePanel();
 		_focusPanel = new FocusPanel(_canvas);
@@ -61,6 +64,9 @@ public class DrawingCanvas extends AbstractWidget {
 		setSelectionBorder(new SelectionBorder(this));
 		addMouseListeners();
 		initModes();
+		
+		_currentX = 0;
+		_currentY = 0;
 	}
 	
 	private void initModes() {
@@ -83,7 +89,13 @@ public class DrawingCanvas extends AbstractWidget {
 	public void addImage(int x, int y, String url) {
 		ImageContainer image = _imagesManager.createImage(url);
 		image.appendTo(_canvas);
-		image.setPosition(_canvas, x, y);
+		image.setPosition(_canvas, x + _currentX, y + _currentY);
+	}
+
+	public void addImages(Rectangle[] result) {
+		for (Rectangle rec : result) {
+			addImage(rec.getMinX(), rec.getMinY(), rec.getUrl());
+		}
 	}
 	
 	public void layerMerged(int newX, int newY) {
@@ -145,12 +157,13 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public void setImagePosition(int x, int y) {
-		_imagesManager.getCurrentImage().setPosition(_canvas, x, y);
+		_imagesManager.getCurrentImage().setPosition(_canvas, 
+				_currentX = x, 
+				_currentY = y);
 	}
 	
 	public Point getImagePosition() {
-		Widget image = _imagesManager.getCurrentImage().getWidget();
-		return new Point(_canvas.getWidgetLeft(image), _canvas.getWidgetTop(image));
+		return new Point(_currentX, _currentY);
 	}
 
 	public boolean isWithinImage(int x, int y) {

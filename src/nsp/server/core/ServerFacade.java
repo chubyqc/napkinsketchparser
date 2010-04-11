@@ -12,6 +12,7 @@ import nsp.server.Utils;
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
+import nsp.server.recognition.BoundedImages;
 import nsp.server.recognition.CharacterMatching;
 import nsp.server.recognition.ShapeFinder;
 import nsp.server.recognition.ShapeMatching;
@@ -134,6 +135,22 @@ class ServerFacade implements IServerFacade {
 			int right, int bottom, FindShapeOptions options) throws Exception {
 		return ShapeFinder.get().findAll(Utils.get().loadImage(getImagePath(layerId)), 
 				left, top, right, bottom, options.getColorTolerance());
+	}
+
+	@Override
+	public Rectangle[] toText(String srcLayerId, String dstLayerId, int left,
+			int top, int right, int bottom, FindShapeOptions options) throws Exception {
+		int layerId = Integer.parseInt(dstLayerId);
+		BoundedImages images =  CharacterMatching.get().getAllShapes(
+				Utils.get().loadImage(getImagePath(srcLayerId)), 
+				left, top, right, bottom, options.getColorTolerance());
+		int i = 0;
+		for (BufferedImage image : images.get()) {
+			String path = getImagePathFile(String.valueOf(layerId++)).getAbsolutePath();
+			images.getRecs()[i++].setUrl(path);
+			Utils.get().saveImage(image, path);
+		}
+		return images.getRecs();
 	}
 	
 	private File getImagePathFile(String layerId) {
