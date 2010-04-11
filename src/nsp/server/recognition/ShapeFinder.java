@@ -55,7 +55,7 @@ public class ShapeFinder {
 							rectangle.getMaxY() :
 							Math.max(toExploreMaxY, rectangle.getMaxY());
 				}
-			} 
+			}
 			if (doNextLine) {
 				toExploreMinX = minX;
 				toExploreMinY = toExploreMaxY + 1;
@@ -99,7 +99,21 @@ public class ShapeFinder {
 			int minX, int minY, int maxX, int maxY, int tolerance) {
 		int localMaxX = minX;
 		int localMaxY = minY;
+		final int yStep = 5;
 		while (localMaxX <= maxX || localMaxY <= maxY) {
+			if (localMaxY <= maxY) {
+				int currentMaxX = Math.min(maxX, localMaxX);
+				for (int i = minX; i <= currentMaxX; ++i) {
+					int tempMaxY = Math.min(localMaxY + yStep, maxY);
+					for (int j = localMaxY; j <= tempMaxY; ++j) {
+						if (Simplifier.get().isPixelOn(img.getRGB(i, j), tolerance)) {
+							return new Point(i, localMaxY);
+						} else {
+							inspected.add(new Point(i, j));
+						}
+					}
+				}
+			}
 			if (localMaxX <= maxX) {
 				int currentMaxY = Math.min(maxY, localMaxY);
 				for (int i = minY; i <= currentMaxY; ++i) {
@@ -110,18 +124,8 @@ public class ShapeFinder {
 					}
 				}
 			}
-			if (localMaxY <= maxY) {
-				int currentMaxX = Math.min(maxX, localMaxX);
-				for (int i = minX; i <= currentMaxX; ++i) {
-					if (Simplifier.get().isPixelOn(img.getRGB(i, localMaxY), tolerance)) {
-						return new Point(i, localMaxY);
-					} else {
-						inspected.add(new Point(i, localMaxY));
-					}
-				}
-			}
 			++localMaxX;
-			++localMaxY;
+			localMaxY += yStep;
 		}
 		return null;
 	}

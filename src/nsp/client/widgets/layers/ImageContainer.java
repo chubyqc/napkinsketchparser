@@ -19,6 +19,7 @@ public class ImageContainer extends AbstractWidget {
 	private int _z;
 	private String _baseUrl;
 	private int _refreshCount;
+	private ImagesManager _manager;
 	
 	public ImageContainer(String path, ImagesManager manager, int z,
 			String layerId) {
@@ -27,6 +28,7 @@ public class ImageContainer extends AbstractWidget {
 		_handle = new LayerHandle(manager, this, layerId);
 		_refreshCount = 0;
 		_baseUrl = path;
+		_manager = manager;
 		refresh();
 	}
 	
@@ -52,6 +54,7 @@ public class ImageContainer extends AbstractWidget {
 	
 	void selected() {
 		_image.addStyleName(STYLE_SELECTED);
+		_manager.setCurrentPosition(_x, _y);
 	}
 	
 	void unselected() {
@@ -78,6 +81,7 @@ public class ImageContainer extends AbstractWidget {
 		_x = x;
 		_y = y;
 		canvas.setWidgetPosition(getWidget(), _x, _y);
+		_manager.setCurrentPosition(_x, _y);
 	}
 	
 	public boolean contains(int x, int y) {

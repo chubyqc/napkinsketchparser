@@ -163,7 +163,7 @@ public class DrawingCanvas extends AbstractWidget {
 	}
 	
 	public Point getImagePosition() {
-		return new Point(_currentX, _currentY);
+		return _imagesManager.getCurrentPosition();
 	}
 
 	public boolean isWithinImage(int x, int y) {

@@ -59,7 +59,7 @@ public class ImagesManager extends AbstractWidget {
 			image.getHandle().unselected();
 		}
 		_currentImages.clear();
-		_currentPosition.set(0, 0);
+		setCurrentPosition(0, 0);
 	}
 	
 	public ImageContainer getCurrentImage() {
@@ -83,7 +83,10 @@ public class ImagesManager extends AbstractWidget {
 		handle.selected(append);
 		_currentHandles.add(handle);
 		_currentImages.add(image);
-		_currentPosition.set(image.getLeft(), image.getTop());
+	}
+
+	public void setCurrentPosition(int x, int y) {
+		_currentPosition.set(x, y);
 	}
 	
 	boolean moveDown(LayerHandle handle, ImageContainer image) {
