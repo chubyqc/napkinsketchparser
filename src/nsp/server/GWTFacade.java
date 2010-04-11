@@ -61,6 +61,16 @@ public class GWTFacade extends RemoteServiceServlet implements
 		}
 	}
 	
+	public String toChar(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options) throws NSPException {
+		try {
+			return toRelativePath(getFacade().toChar(srcLayerId, dstLayerId, left, 
+					top, right, bottom, options));
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+	
 	@Override
 	public void mergeImages(String[] layerIds, int[] lefts, int[] tops, int[] rights,
 			int[] bottoms) throws NSPException {

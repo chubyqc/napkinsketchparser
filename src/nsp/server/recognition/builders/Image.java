@@ -4,12 +4,12 @@ import java.awt.Shape;
 
 import nsp.server.Utils;
 
-public class Connector implements IShapeBuilder {
+public class Image implements IShapeBuilder {
 	
 	private IComparer _comparer;
 	
-	public Connector() {
-		_comparer = new ImageComparer(Utils.get().loadImage("shapes/connector.png"));
+	public Image(String path) {
+		_comparer = new ImageComparer(Utils.get().loadImage(path));
 	}
 
 	@Override

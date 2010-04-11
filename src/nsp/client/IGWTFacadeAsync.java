@@ -21,6 +21,10 @@ public interface IGWTFacadeAsync {
 	void toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
 			ToShapeOptions options, AsyncCallback<String> callback);
 
+	void toChar(String srcLayerId, String dstLayerId, int left, int top,
+			int right, int bottom, ToShapeOptions options,
+			AsyncCallback<String> callback);
+
 	void findShape(String layerId, int left, int top, int right, int bottom,
 			AsyncCallback<Rectangle> callback);
 

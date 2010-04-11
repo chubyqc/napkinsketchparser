@@ -17,21 +17,23 @@ public class Comparer {
 		int height = firstImg.getHeight();
 		int[] rowFromFirst = new int[width];
 		int[] rowFromSecond = new int[width];
-		int pixelOnCount = 0;
-		int alikePixelCount = 0;
+		int m11 = 0, m01 = 0, m10 = 0;
 		for (int i = 0; i < height; ++i) {
 			firstImg.getRGB(0, i, width, 1, rowFromFirst, 0, width);
 			secondImg.getRGB(0, i, width, 1, rowFromSecond, 0, width);
 			for (int j = 0; j < width; ++j) {
-				if (Simplifier.get().isPixelOn(rowFromFirst[j])) {
-					++pixelOnCount;
-					if (rowFromFirst[j] == rowFromSecond[j]) {
-						++alikePixelCount;
-					}
+				boolean firstOn = Simplifier.get().isPixelOn(rowFromFirst[j]);
+				boolean secondOn = Simplifier.get().isPixelOn(rowFromSecond[j]);
+				if (firstOn && secondOn) {
+					++m11;
+				} else if (firstOn && !secondOn) {
+					++m10;
+				} else if (!firstOn && secondOn) {
+					++m01;
 				}
 			}
 		}
-		return (pixelOnCount == 0) ? 0 : (double)alikePixelCount / pixelOnCount;
+		return m11 / (m01 + m10 + m11);
 	}
 	
 	public boolean isAlike(double score) {

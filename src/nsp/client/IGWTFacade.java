@@ -22,6 +22,9 @@ public interface IGWTFacade extends RemoteService {
 	
 	String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
 			ToShapeOptions options) throws NSPException;
+	
+	String toChar(String srcLayerId, String dstLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options) throws NSPException;
 
 	Rectangle findShape(String layerId, int left, int top, int right, int bottom) throws NSPException;
 

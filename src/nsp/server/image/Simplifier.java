@@ -17,17 +17,24 @@ public class Simplifier {
 	
 	private BufferedImage simplify(BufferedImage complex, int tolerance, int newWidth, int newHeight,
 			double pixelOnPercentage) {
-		int pixelWidth = complex.getWidth() / newWidth;
-		int pixelHeight = complex.getHeight() / newHeight;
+		int srcWidth = complex.getWidth();
+		int srcHeight = complex.getHeight();
+		double pixelWidth = Math.max(1, (double)complex.getWidth() / newWidth);
+		double pixelHeight = Math.max(1, (double)complex.getHeight() / newHeight);
 		
 		BufferedImage simplified = Utils.get().newImage(newWidth, newHeight);
-		int[] buffer = new int[pixelWidth * pixelHeight];
+		int[] buffer = new int[(int)pixelWidth * (int)pixelHeight];
 		
-		for (int i = 0; i < newHeight; ++i) {
-			for (int j = 0; j < newWidth; ++j) {
-				complex.getRGB(j * pixelWidth, i * pixelHeight, pixelWidth, 
-						pixelHeight, buffer, 0, pixelWidth);
-				simplified.setRGB(j, i, getSimplifiedPixel(buffer, tolerance, pixelOnPercentage));
+		int srcI, srcJ;
+		for (int i = 0; (srcI = (int)(i * pixelHeight)) < srcHeight; ++i) {
+			for (int j = 0; (srcJ = (int)(j * pixelWidth)) < srcWidth; ++j) {
+				try {
+					complex.getRGB(srcJ, srcI, (int)pixelWidth, (int)pixelHeight, buffer, 0, 
+							(int)pixelWidth);
+					simplified.setRGB(j, i, getSimplifiedPixel(buffer, tolerance, pixelOnPercentage));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return simplified;

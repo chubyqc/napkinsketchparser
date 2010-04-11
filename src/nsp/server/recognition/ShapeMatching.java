@@ -14,7 +14,7 @@ import nsp.server.recognition.builders.Rectangle;
 import nsp.server.recognition.builders.Result;
 
 public class ShapeMatching {
-	private static ShapeMatching _instance = new ShapeMatching();
+	private static ShapeMatching _instance = new ShapeMatching(true);
 	public static ShapeMatching get() {
 		return _instance;
 	}
@@ -24,12 +24,23 @@ public class ShapeMatching {
 	
 	private Collection<IShapeBuilder> _shapes;
 	
-	private ShapeMatching() {
+	private ShapeMatching(boolean doInit) {
 		_shapes = new LinkedList<IShapeBuilder>();
-		_shapes.add(new Rectangle());
-		_shapes.add(new Circle());
-		_shapes.add(new Line());
-		_shapes.add(new Connector());
+		if (doInit) {
+			addShape(new Rectangle());
+			addShape(new Circle());
+			addShape(new Line());
+			addShape(new Connector());
+		}
+	}
+	
+	protected ShapeMatching() {
+		this(false);
+		_shapes = new LinkedList<IShapeBuilder>();
+	}
+	
+	protected void addShape(IShapeBuilder builder) {
+		_shapes.add(builder);
 	}
 	
 	public Result getShape(BufferedImage img, int dstWidth, int dstHeight) {

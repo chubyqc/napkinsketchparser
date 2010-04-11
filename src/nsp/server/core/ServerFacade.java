@@ -12,6 +12,7 @@ import nsp.server.Utils;
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
+import nsp.server.recognition.CharacterMatching;
 import nsp.server.recognition.ShapeFinder;
 import nsp.server.recognition.ShapeMatching;
 import nsp.server.recognition.builders.Result;
@@ -67,8 +68,7 @@ class ServerFacade implements IServerFacade {
 		return croppedImage;
 	}
 	
-	@Override
-	public String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, 
+	private String toShape(ShapeMatching matcher, String srcLayerId, String dstLayerId, int left, int top, int right, 
 			int bottom, ToShapeOptions options) throws Exception {
 		int width = right - left;
 		int height = bottom - top;
@@ -76,13 +76,27 @@ class ServerFacade implements IServerFacade {
 		BufferedImage image = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
 			cropImage(left, top, right, bottom, Cropper.Shape.Rectangle);
 		
-		Result result = ShapeMatching.get().getShape(
+		Result result = matcher.getShape(
 				ShapeMatching.get().simplify(image, options.getColorTolerance(), 
 						options.getPixelOnPercentage()), right - left, bottom - top);
 		if (result != null) {
 			Utils.get().saveImage(result.toImage(width, height), croppedImage);
 		}
 		return croppedImage;
+	}
+	
+	@Override
+	public String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, 
+			int bottom, ToShapeOptions options) throws Exception {
+		return toShape(ShapeMatching.get(), srcLayerId, dstLayerId, left, top, right, 
+				bottom, options);
+	}
+	
+	@Override
+	public String toChar(String srcLayerId, String dstLayerId, int left, int top, int right,
+			int bottom, ToShapeOptions options) throws Exception {
+		return toShape(CharacterMatching.get(), srcLayerId, dstLayerId, left, top, right, 
+				bottom, options);
 	}
 	
 	@Override

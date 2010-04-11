@@ -25,4 +25,7 @@ public interface IServerFacade {
 
 	Rectangle[] findAllShape(String layerId, int minX, int minY, int maxX,
 			int maxY, FindShapeOptions options) throws Exception;
+
+	String toChar(String srcLayerId, String dstLayerId, int left, int top,
+			int right, int bottom, ToShapeOptions options) throws Exception;
 }
