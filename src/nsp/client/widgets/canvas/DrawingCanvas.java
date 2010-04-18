@@ -8,6 +8,7 @@ import nsp.client.Styles;
 import nsp.client.geom.Point;
 import nsp.client.geom.Rectangle;
 import nsp.client.widgets.AbstractWidget;
+import nsp.client.widgets.ExportHandle;
 import nsp.client.widgets.canvas.modes.AbstractMode;
 import nsp.client.widgets.canvas.modes.Move;
 import nsp.client.widgets.canvas.modes.Select;
@@ -48,7 +49,8 @@ public class DrawingCanvas extends AbstractWidget {
 	private int _currentX;
 	private int _currentY;
 	
-	public DrawingCanvas(int width, int height, RootPanel root) {
+	public DrawingCanvas(int width, int height, ExportHandle exportHandle, 
+			RootPanel root) {
 		_canvas = new AbsolutePanel();
 		_focusPanel = new FocusPanel(_canvas);
 		_imagesManager = new ImagesManager();
@@ -57,6 +59,7 @@ public class DrawingCanvas extends AbstractWidget {
 
 		VerticalPanel panel = new VerticalPanel();
 		panel.addStyleName(Styles.get().getLists());
+		exportHandle.appendTo(panel);
 		_imagesManager.appendTo(panel);
 		_selectionsManager.appendTo(panel);
 		root.add(panel);

@@ -29,6 +29,6 @@
 	border: 1px dashed black;
 }
 
-.optionToggler {
+.optionToggler, .exportHandle {
 	cursor: pointer;
 }

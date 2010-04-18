@@ -4,6 +4,9 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 import nsp.server.Utils;
+import nsp.server.recognition.builders.comparers.Comparer;
+import nsp.server.recognition.builders.comparers.IComparer;
+import nsp.server.recognition.builders.results.Result;
 
 public class Circle implements IShapeBuilder {
 	

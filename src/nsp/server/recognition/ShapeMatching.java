@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import nsp.client.widgets.tools.options.ToShapeOptions;
 import nsp.server.Utils;
 import nsp.server.image.Cropper;
 import nsp.server.image.Simplifier;
@@ -12,7 +13,7 @@ import nsp.server.recognition.builders.Connector;
 import nsp.server.recognition.builders.IShapeBuilder;
 import nsp.server.recognition.builders.Line;
 import nsp.server.recognition.builders.Rectangle;
-import nsp.server.recognition.builders.Result;
+import nsp.server.recognition.builders.results.Result;
 
 public class ShapeMatching {
 	private static ShapeMatching _instance = new ShapeMatching(true);
@@ -58,18 +59,22 @@ public class ShapeMatching {
 		return bestResult;
 	}
 
-	public BoundedImages getAllShapes(BufferedImage img, int left, int top,
-			int right, int bottom, int colorTolerance) throws Exception {
+	public BoundedResults getAllShapes(BufferedImage img, int left, int top,
+			int right, int bottom, ToShapeOptions options) throws Exception {
 		nsp.client.geom.Rectangle[] shapes = ShapeFinder.get().findAll(img, left, top, 
-				right, bottom, colorTolerance);
-		BufferedImage[] results = new BufferedImage[shapes.length]; 
+				right, bottom, options.getColorTolerance());
+		Result[] results = new Result[shapes.length]; 
 		Cropper cropper = new Cropper(img);
 		int i = -1;
 		for (nsp.client.geom.Rectangle shape : shapes) {
-			results[++i] = cropper.cropImage(shape.getMinX(), 
-					shape.getMinY(), shape.getMaxX(), shape.getMaxY(), Cropper.Shape.Rectangle);
+			results[++i] = CharacterMatching.get().getShape(
+					CharacterMatching.get().simplify(cropper.cropImage(shape.getMinX(), 
+							shape.getMinY(), shape.getMaxX(), shape.getMaxY(), 
+							Cropper.Shape.Rectangle), options.getColorTolerance(), 
+							options.getPixelOnPercentage()), 
+							shape.getWidth(), shape.getHeight());
 		}
-		return new BoundedImages(shapes, results);
+		return new BoundedResults(shapes, results);
 	}
 	
 	public BufferedImage simplify(BufferedImage img, int tolerance, double pixelOnTolerance) {

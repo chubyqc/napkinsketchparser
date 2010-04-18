@@ -1,12 +1,13 @@
-package nsp.server.recognition.builders;
+package nsp.server.recognition.builders.results;
 
 import java.awt.image.BufferedImage;
+
 
 public class ImageResult extends Result {
 	
 	private BufferedImage _result;
 
-	ImageResult(double score, BufferedImage result) {
+	public ImageResult(double score, BufferedImage result) {
 		super(null, score);
 		_result = result;
 	}

@@ -3,6 +3,9 @@ package nsp.server.recognition.builders;
 import java.awt.Shape;
 
 import nsp.server.Utils;
+import nsp.server.recognition.builders.comparers.Comparer;
+import nsp.server.recognition.builders.comparers.IComparer;
+import nsp.server.recognition.builders.results.Result;
 
 public class Rectangle implements IShapeBuilder {
 	

@@ -32,5 +32,8 @@ public interface IGWTFacadeAsync {
 			FindShapeOptions findShapeOptions, AsyncCallback<Rectangle[]> asyncCallback);
 
 	void toText(String srcLayerId, String dstLayerId, int left, int top, int right,
-			int bottom, FindShapeOptions options, AsyncCallback<Rectangle[]> asyncCallback);
+			int bottom, ToShapeOptions options, AsyncCallback<Rectangle[]> asyncCallback);
+
+	void export(String layerId, int minX, int minY, int maxX, int maxY,
+			ToShapeOptions options, AsyncCallback<String> asyncCallback);
 }

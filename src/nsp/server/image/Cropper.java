@@ -32,8 +32,8 @@ public class Cropper extends Transformer{
 	
 	public BufferedImage cropImage(int left, int top, int right, int down, Shape eShape) throws Exception
 	{
-		int w = right-left;
-		int h = down-top;
+		int w = right-left + 1;
+		int h = down-top + 1;
 		
 		java.awt.Shape shape = null;
 		

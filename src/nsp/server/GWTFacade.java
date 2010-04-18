@@ -103,10 +103,21 @@ public class GWTFacade extends RemoteServiceServlet implements
 
 	@Override
 	public Rectangle[] toText(String srcLayerId, String dstLayerId, int left, int top, int right,
-			int bottom, FindShapeOptions options) throws NSPException {
+			int bottom, ToShapeOptions options) throws NSPException {
 		try {
 			return toRelativePaths(getFacade().toText(srcLayerId, dstLayerId, left, 
 					top, right, bottom, options));
+		} catch (Exception e) {
+			throw new NSPException();
+		}
+	}
+
+	@Override
+	public String export(String srcLayerId, int left, int top, int right,
+			int bottom, ToShapeOptions options) throws NSPException {
+		try {
+			return toRelativePath(getFacade().export(srcLayerId, left, top, right, bottom,
+				options));
 		} catch (Exception e) {
 			throw new NSPException();
 		}

@@ -30,5 +30,8 @@ public interface IServerFacade {
 			int right, int bottom, ToShapeOptions options) throws Exception;
 
 	Rectangle[] toText(String srcLayerId, String dstLayerId, int left, int top,
-			int right, int bottom, FindShapeOptions options) throws Exception;
+			int right, int bottom, ToShapeOptions options) throws Exception;
+
+	String export(String srcLayerId, int left, int top, int right, int bottom,
+			ToShapeOptions options) throws Exception;
 }

@@ -1,10 +1,13 @@
-package nsp.server.recognition.builders;
+package nsp.server.recognition.builders.comparers;
 
 import java.awt.image.BufferedImage;
 
+import nsp.server.recognition.builders.results.ImageResult;
+import nsp.server.recognition.builders.results.Result;
+
 public class ImageComparer extends Comparer {
 
-	ImageComparer(BufferedImage model) {
+	public ImageComparer(BufferedImage model) {
 		super(null, model);
 	}
 	

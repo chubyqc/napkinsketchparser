@@ -1,13 +1,16 @@
-package nsp.server.recognition.builders;
+package nsp.server.recognition.builders.comparers;
 
 import java.awt.image.BufferedImage;
+
+import nsp.server.recognition.builders.IShapeBuilder;
+import nsp.server.recognition.builders.results.Result;
 
 public class Comparer implements IComparer {
 	
 	protected BufferedImage _model;
 	private IShapeBuilder _builder;
 
-	Comparer(IShapeBuilder builder, BufferedImage model) {
+	public Comparer(IShapeBuilder builder, BufferedImage model) {
 		_builder = builder;
 		_model = model;
 	}

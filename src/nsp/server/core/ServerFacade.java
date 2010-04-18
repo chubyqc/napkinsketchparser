@@ -12,13 +12,16 @@ import nsp.server.Utils;
 import nsp.server.core.config.Config;
 import nsp.server.image.Cropper;
 import nsp.server.image.Fusion;
-import nsp.server.recognition.BoundedImages;
+import nsp.server.output.oo.Facade;
+import nsp.server.recognition.BoundedResults;
 import nsp.server.recognition.CharacterMatching;
 import nsp.server.recognition.ShapeFinder;
 import nsp.server.recognition.ShapeMatching;
-import nsp.server.recognition.builders.Result;
+import nsp.server.recognition.builders.results.Result;
 
 class ServerFacade implements IServerFacade {
+
+	private static final String EXPORT_PATH = "export.odt";
 	
 	private String _id;
 	
@@ -76,10 +79,9 @@ class ServerFacade implements IServerFacade {
 		String croppedImage = getImagePathFile(dstLayerId).getAbsolutePath();
 		BufferedImage image = new Cropper(Utils.get().loadImage(getImagePath(srcLayerId))).
 			cropImage(left, top, right, bottom, Cropper.Shape.Rectangle);
-		
 		Result result = matcher.getShape(
 				ShapeMatching.get().simplify(image, options.getColorTolerance(), 
-						options.getPixelOnPercentage()), right - left, bottom - top);
+						options.getPixelOnPercentage()), width, height);
 		if (result != null) {
 			Utils.get().saveImage(result.toImage(width, height), croppedImage);
 		}
@@ -90,13 +92,6 @@ class ServerFacade implements IServerFacade {
 	public String toShape(String srcLayerId, String dstLayerId, int left, int top, int right, 
 			int bottom, ToShapeOptions options) throws Exception {
 		return toShape(ShapeMatching.get(), srcLayerId, dstLayerId, left, top, right, 
-				bottom, options);
-	}
-	
-	@Override
-	public String toChar(String srcLayerId, String dstLayerId, int left, int top, int right,
-			int bottom, ToShapeOptions options) throws Exception {
-		return toShape(CharacterMatching.get(), srcLayerId, dstLayerId, left, top, right, 
 				bottom, options);
 	}
 	
@@ -136,21 +131,41 @@ class ServerFacade implements IServerFacade {
 		return ShapeFinder.get().findAll(Utils.get().loadImage(getImagePath(layerId)), 
 				left, top, right, bottom, options.getColorTolerance());
 	}
+	
+	@Override
+	public String toChar(String srcLayerId, String dstLayerId, int left, int top, int right,
+			int bottom, ToShapeOptions options) throws Exception {
+		return toShape(CharacterMatching.get(), srcLayerId, dstLayerId, left, top, right, 
+				bottom, options);
+	}
 
 	@Override
 	public Rectangle[] toText(String srcLayerId, String dstLayerId, int left,
-			int top, int right, int bottom, FindShapeOptions options) throws Exception {
+			int top, int right, int bottom, ToShapeOptions options) throws Exception {
+		BoundedResults results = CharacterMatching.get().getAllShapes(
+				Utils.get().loadImage(getImagePathFile(srcLayerId).getAbsolutePath()), 
+				left, top, right, bottom, options);
 		int layerId = Integer.parseInt(dstLayerId);
-		BoundedImages images =  CharacterMatching.get().getAllShapes(
-				Utils.get().loadImage(getImagePath(srcLayerId)), 
-				left, top, right, bottom, options.getColorTolerance());
 		int i = 0;
-		for (BufferedImage image : images.get()) {
+		for (Result result : results.get()) {
 			String path = getImagePathFile(String.valueOf(layerId++)).getAbsolutePath();
-			images.getRecs()[i++].setUrl(path);
-			Utils.get().saveImage(image, path);
+			Rectangle rec = results.getRecs()[i++];
+			rec.setUrl(path);
+			Utils.get().saveImage(result.toImage(0, 0), path);
 		}
-		return images.getRecs();
+		return results.getRecs();
+	}
+
+	@Override
+	public String export(String srcLayerId, int left, int top, int right,
+			int bottom, ToShapeOptions options) throws Exception {
+		String path = getImagePathFile(EXPORT_PATH).getAbsolutePath();
+		Facade.get().createTextDocument(
+				CharacterMatching.get().getText(
+						Utils.get().loadImage(getImagePathFile(srcLayerId).getAbsolutePath()), 
+						left, top, right, bottom, options), 
+				path);
+		return path;
 	}
 	
 	private File getImagePathFile(String layerId) {

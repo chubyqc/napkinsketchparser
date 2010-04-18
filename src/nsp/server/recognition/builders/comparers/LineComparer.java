@@ -1,11 +1,14 @@
-package nsp.server.recognition.builders;
+package nsp.server.recognition.builders.comparers;
 
 import java.awt.image.BufferedImage;
 
 import nsp.server.image.Simplifier;
+import nsp.server.recognition.builders.IShapeBuilder;
+import nsp.server.recognition.builders.results.LineResult;
+import nsp.server.recognition.builders.results.Result;
 
 
-class LineComparer implements IComparer {
+public class LineComparer implements IComparer {
 	
 	private IShapeBuilder _builder;
 

@@ -1,4 +1,4 @@
-package nsp.server.recognition.builders;
+package nsp.server.recognition.builders.results;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import nsp.server.Utils;
 import nsp.server.image.Comparer;
+import nsp.server.recognition.builders.IShapeBuilder;
 
 public class Result {
 	
@@ -14,7 +15,7 @@ public class Result {
 	private Shape _shape;
 	private IShapeBuilder _builder;
 	
-	Result(IShapeBuilder builder, double score) {
+	public Result(IShapeBuilder builder, double score) {
 		_builder = builder;
 		_score = score;
 	}

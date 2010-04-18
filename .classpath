@@ -5,5 +5,10 @@
 	<classpathentry kind="lib" path="/home/chubyqc/workspace/NapkinSketchParser/war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="/home/chubyqc/workspace/NapkinSketchParser/war/WEB-INF/lib/commons-io-1.4.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (1)"/>
+	<classpathentry kind="lib" path="/opt/openoffice.org3/program"/>
+	<classpathentry kind="lib" path="/opt/openoffice.org/basis3.2/ure-link/share/java/juh.jar"/>
+	<classpathentry kind="lib" path="/opt/openoffice.org/basis3.2/ure-link/share/java/jurt.jar"/>
+	<classpathentry kind="lib" path="/opt/openoffice.org/basis3.2/ure-link/share/java/ridl.jar"/>
+	<classpathentry kind="lib" path="/opt/openoffice.org/basis3.2/program/classes/unoil.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
