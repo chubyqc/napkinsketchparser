@@ -160,11 +160,12 @@ class ServerFacade implements IServerFacade {
 	public String export(String srcLayerId, int left, int top, int right,
 			int bottom, ToShapeOptions options) throws Exception {
 		String path = getImagePathFile(EXPORT_PATH).getAbsolutePath();
-		Facade.get().createTextDocument(
-				CharacterMatching.get().getText(
-						Utils.get().loadImage(getImagePathFile(srcLayerId).getAbsolutePath()), 
-						left, top, right, bottom, options), 
-				path);
+		Facade oo = new Facade();
+		Object doc = oo.createTextDocument();
+		oo.appendText(doc, CharacterMatching.get().getText(
+				Utils.get().loadImage(getImagePathFile(srcLayerId).getAbsolutePath()), 
+				left, top, right, bottom, options));
+		oo.save(doc, path);
 		return path;
 	}
 	

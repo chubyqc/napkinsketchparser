@@ -99,18 +99,14 @@ public class ShapeFinder {
 			int minX, int minY, int maxX, int maxY, int tolerance) {
 		int localMaxX = minX;
 		int localMaxY = minY;
-		final int yStep = 5;
 		while (localMaxX <= maxX || localMaxY <= maxY) {
 			if (localMaxY <= maxY) {
 				int currentMaxX = Math.min(maxX, localMaxX);
 				for (int i = minX; i <= currentMaxX; ++i) {
-					int tempMaxY = Math.min(localMaxY + yStep, maxY);
-					for (int j = localMaxY; j <= tempMaxY; ++j) {
-						if (Simplifier.get().isPixelOn(img.getRGB(i, j), tolerance)) {
-							return new Point(i, localMaxY);
-						} else {
-							inspected.add(new Point(i, j));
-						}
+					if (Simplifier.get().isPixelOn(img.getRGB(i, localMaxY), tolerance)) {
+						return new Point(i, localMaxY);
+					} else {
+						inspected.add(new Point(i, localMaxY));
 					}
 				}
 			}
@@ -125,7 +121,7 @@ public class ShapeFinder {
 				}
 			}
 			++localMaxX;
-			localMaxY += yStep;
+			++localMaxY;
 		}
 		return null;
 	}

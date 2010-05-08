@@ -33,7 +33,7 @@ public class Comparer {
 				}
 			}
 		}
-		return m11 / (m01 + m10 + m11);
+		return (double)m11 / (m01 + m10 + m11);
 	}
 	
 	public boolean isAlike(double score) {
